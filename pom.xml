@@ -60,9 +60,27 @@
           <archive>
             <manifest>
               <mainClass>org.ruleml.translation.ruleml2tptp.Main</mainClass>
+              <addClasspath>true</addClasspath>
+              <classpathPrefix>dependency/</classpathPrefix>
             </manifest>
           </archive>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.10</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeScope>compile</includeScope>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

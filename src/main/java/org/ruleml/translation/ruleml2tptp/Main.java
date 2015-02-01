@@ -7,8 +7,12 @@ import org.kohsuke.args4j.Option;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
@@ -36,23 +40,25 @@ public class Main {
         + "  </xsl:template>"
         + "</xsl:stylesheet>");
 
+    private static final int EC_GENERAL = 1;
+    private static final int EC_TRANSFORM = 2;
+
     @Option(name="-h",aliases={"-?","-help"},help=true,usage="print this message")
     private boolean help;
 
-    @Option(name="-o",aliases={"-output"},metaVar="<path>",usage="use given output path (the standard output or the current working directory by default)")
+    @Option(name="-o",aliases={"-output"},metaVar="<path>",usage="use given output path (the standard output by default)")
     private File output;
 
     @Option(name="-f",aliases={"-transformer-factory"},metaVar="<class>",usage="use given factory class")
     private String transFactoryClass;
 
-    @Option(name="-r",aliases={"-recursive"},usage="traverse the directory tree for input files")
+    @Option(name="-r",aliases={"-recursive"},hidden=true,usage="traverse the directory tree for input files")
     private boolean recursive;
 
     @Argument
-    private List<String> input;
+    private String input;
 
-    private static final int EC_GENERAL = 1;
-    private static final int EC_TRANSFORM = 2;
+    private SAXTransformerFactory transFactory;
 
     public static void main(String args[]) {
         final Main appMain = new Main();
@@ -65,24 +71,25 @@ public class Main {
             System.err.println();
             System.exit(EC_GENERAL);
         }
-        SAXTransformerFactory transFactory;
         try {
             if (appMain.transFactoryClass == null) {
-                transFactory = (SAXTransformerFactory) (SAXTransformerFactory.newInstance());
+                appMain.transFactory = (SAXTransformerFactory) (SAXTransformerFactory.newInstance());
             } else {
-                transFactory = (SAXTransformerFactory) (SAXTransformerFactory.newInstance(
+                appMain.transFactory = (SAXTransformerFactory) (SAXTransformerFactory.newInstance(
                             appMain.transFactoryClass, Main.class.getClassLoader()));
             }
         } catch (TransformerFactoryConfigurationError err) {
             throw new IllegalStateException(err);
         }
         if (appMain.help) {
-            System.out.println("Usage: [options] <input-file> ...");
+            System.out.println("Usage: [options] <path>");
+            System.out.println();
             System.out.println("Options:");
             parser.printUsage(System.out);
-            StringWriter noteWriter = new StringWriter();
+            System.out.println();
+            final StringWriter noteWriter = new StringWriter();
             try {
-                transFactory.newTransformer(new StreamSource(new StringReader(xsltProperties)))
+                appMain.transFactory.newTransformer(new StreamSource(new StringReader(xsltProperties)))
                     .transform(new StreamSource(new StringReader(dummyXML)), new StreamResult(noteWriter));
             } catch (TransformerException ex) {
                 throw new IllegalStateException(ex);
@@ -92,24 +99,39 @@ public class Main {
             System.out.println();
             return;
         }
-        appMain.run(transFactory);
+        appMain.run();
     }
 
-    private void run(SAXTransformerFactory transFactory) {
+    private void run() {
         final Translator translator = new Translator(transFactory);
         translator.loadTemplates();
         try {
-            translator.translate(new StreamSource(new FileInputStream(input.get(0))),
-                    new StreamResult(output));
+            if (input == null) {
+                if (output == null) {
+                    translate(translator, System.in, System.out);
+                } else {
+                    translate(translator, System.in, new FileOutputStream(output));
+                }
+            } else if (output == null) {
+                translate(translator, new FileInputStream(input), System.out);
+            } else {
+                translate(translator, new FileInputStream(input), new FileOutputStream(output));
+            }
+
         } catch (TransformerException ex) {
             System.err.println(ex.getMessageAndLocation());
             System.err.println();
             System.exit(EC_TRANSFORM);
         } catch (FileNotFoundException ex) {
-            System.err.println(ex.getLocalizedMessage());
+            System.err.println("Failed to operate file: " + ex.getLocalizedMessage());
             System.err.println();
             System.exit(EC_TRANSFORM);
         }
+    }
+
+    private void translate(Translator translator, InputStream in, OutputStream out)
+        throws TransformerException {
+        translator.translate(new StreamSource(in), new StreamResult(out));
     }
 
 }
