@@ -4,7 +4,7 @@
 
   <groupId>org.ruleml.translation.ruleml2tptp</groupId>
   <artifactId>ruleml2tptp</artifactId>
-  <version>1.1-SNAPSHOT</version>
+  <version>1.1</version>
   <packaging>jar</packaging>
 
   <name>ruleml2tptp</name>
