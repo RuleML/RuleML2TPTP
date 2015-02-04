@@ -4,26 +4,38 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:r="http://ruleml.org/spec">
-<xsl:output method="text"/>
-<xsl:strip-space elements="*"/>
-
 <!-- line break -->
 <xsl:param name="nl" select="'&#xA;'" as="xs:string" required="no"/>
 
+<xsl:output method="text" encoding="UTF-8"/>
+<xsl:strip-space elements="*"/>
+
+
 <xsl:template match="comment()" mode="#all">
-  <!-- trim lines -->
-  <xsl:variable name="step1"
-    select="replace(., '(^[ \t]+)|([ \t]+$)', '', 'm')"/>
-  <!-- trim first and last lines if they are blank -->
-  <xsl:variable name="step2"
-    select="replace($step1, '(^\r*\n)|(\r*\n$)', '')"/>
-  <!-- insert '% ' -->
-  <xsl:variable name="final"
-    select="replace($step2, '^([^%])', '% $1', 'm')"/>
-  <!-- switch to a new line after the comment -->
-  <xsl:value-of select="$nl"/>
-  <xsl:value-of select="$final"/>
-  <xsl:value-of select="$nl"/>
+  <xsl:if test="not(matches(., '^\s*$'))">
+    <!-- trim lines -->
+    <xsl:variable name="step-trim-ends"
+      select="replace(., '(^[ \t]+)|([ \t]+$)', '')"/>
+    <xsl:variable name="step-trim-lines"
+      select="replace($step-trim-ends, '[ \t]*(\r?\n)[ \t]*', '$1')"/>
+    <!-- trim first and last lines if they are blank -->
+    <xsl:variable name="step-trim-first-blank-line"
+      select="replace($step-trim-lines, '^\r?\n', '')"/>
+    <xsl:variable name="step-trim-last-blank-line"
+      select="replace($step-trim-first-blank-line, '\r?\n$', '')"/>
+    <!-- insert '% ' -->
+    <xsl:variable name="step-insert-spaces"
+      select="replace($step-trim-last-blank-line, '^%', '% ', 'm')"/>
+    <xsl:variable name="step-insert-first"
+      select="replace($step-insert-spaces, '^([^%])', '% $1')"/>
+    <xsl:variable name="step-insert-last"
+      select="replace($step-insert-first, '(\r?\n)$', '$1% ')"/>
+    <xsl:variable name="step-insert"
+      select="replace($step-insert-last, '(\r?\n)([^%])', '$1% $2')"/>
+    <xsl:value-of select="$step-insert"/>
+    <!-- switch to a new line after the comment -->
+    <xsl:value-of select="$nl"/>
+  </xsl:if>
 </xsl:template>
 
 <!-- break the line with indentation -->
@@ -48,27 +60,32 @@
 </xsl:template>
 
 <xsl:template match="/">
-  <xsl:apply-templates select="r:RuleML | comment()"/>
+  <xsl:apply-templates select="comment()"/>
+  <xsl:apply-templates select="r:RuleML"/>
 </xsl:template>
 
 <xsl:template match="r:RuleML">
-  <xsl:apply-templates select="r:act | comment()"/>
+  <xsl:apply-templates select="comment()"/>
+  <xsl:apply-templates select="r:act"/>
 </xsl:template>
 
 <xsl:template match="r:act">
-  <xsl:apply-templates select="r:Assert | r:Query | comment()">
+  <xsl:apply-templates select="comment()"/>
+  <xsl:apply-templates select="r:Assert | r:Query">
     <xsl:with-param name="act-index" select="@index" tunnel="yes"/>
   </xsl:apply-templates>
 </xsl:template>
 
 <xsl:template match="r:Assert">
-  <xsl:apply-templates select="r:formula | comment()" mode="fof-formula">
+  <xsl:apply-templates select="comment()"/>
+  <xsl:apply-templates select="r:formula" mode="fof-formula">
     <xsl:with-param name="formula-type" select="local-name()"/>
   </xsl:apply-templates>
 </xsl:template>
 
 <xsl:template match="r:Query">
-  <xsl:apply-templates select="r:formula | comment()" mode="fof-formula">
+  <xsl:apply-templates select="comment()"/>
+  <xsl:apply-templates select="r:formula" mode="fof-formula">
     <xsl:with-param name="formula-type" select="local-name()"/>
   </xsl:apply-templates>
 </xsl:template>
@@ -97,7 +114,7 @@
   <xsl:text>,</xsl:text>
 
   <xsl:variable name="content-sequence" as="xs:string*">
-    <xsl:apply-templates>
+    <xsl:apply-templates select="r:*">
       <xsl:with-param name="depth" select="$depth" tunnel="yes"/>
       <!-- this param indicates if the children can break the line at the very
           beginning -->
@@ -114,11 +131,15 @@
     <xsl:with-param name="depth" select="$depth"/>
   </xsl:call-template>
   <xsl:value-of select="$content"/>
+  <xsl:choose>
+    <xsl:when test="$need-extra-parens">
+      <xsl:text> )).</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>).</xsl:text>
+    </xsl:otherwise>
+  </xsl:choose>
   <xsl:value-of select="$nl"/>
-  <xsl:if test="$need-extra-parens">
-    <xsl:text>)</xsl:text>
-  </xsl:if>
-  <xsl:text>).</xsl:text>
   <xsl:value-of select="$nl"/>
 </xsl:template>
 
@@ -249,7 +270,7 @@
           <xsl:value-of select="$connective"/>
           <xsl:text> </xsl:text>
         </xsl:if>
-        <xsl:apply-templates>
+        <xsl:apply-templates select="r:*">
           <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
           <xsl:with-param name="line-breaking" select="false()" tunnel="yes"/>
         </xsl:apply-templates>
@@ -257,7 +278,7 @@
       <xsl:text> )</xsl:text>
     </xsl:when>
     <xsl:when test="r:formula">
-      <xsl:apply-templates>
+      <xsl:apply-templates select="r:*">
         <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
         <xsl:with-param name="line-breaking" select="false()" tunnel="yes"/>
       </xsl:apply-templates>
@@ -289,30 +310,18 @@
 
 <!-- variables in the TPTP language start with a uppercase letter -->
 <xsl:template match="r:Var">
-  <xsl:if test="not(matches(text(), '^[a-z][a-z0-9_]*$', 'i'))">
-    <xsl:message terminate="no">
-      <xsl:text>Variable '</xsl:text>
-      <xsl:value-of select="text()"/>
-      <xsl:text>' cannot be converted into the valid format.</xsl:text>
-    </xsl:message>
-  </xsl:if>
-  <xsl:value-of select="concat(upper-case(substring(text(), 1, 1)), substring(text(), 2))"/>
+  <xsl:variable name="normalized-text" select="normalize-space(text())" as="xs:string"/>
+  <xsl:value-of select="concat(upper-case(substring($normalized-text, 1, 1)), substring($normalized-text, 2))"/>
 </xsl:template>
 
 <!-- constants and functors in the TPTP language start with a lowercase letter or is single-quoted -->
 <xsl:template match="r:Rel | r:Ind">
+  <xsl:variable name="normalized-text" select="normalize-space(text())" as="xs:string"/>
   <xsl:choose>
-    <xsl:when test="matches(text(), '^[a-z][a-z0-9_]*$', 'i')">
+    <xsl:when test="matches($normalized-text, '^[a-z][a-z0-9_]*$', 'i')">
       <xsl:value-of select="concat(lower-case(substring(text(), 1, 1)), substring(text(), 2))"/>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:if test="not(matches(text(), '^[&#x20;-&#x7E;]+$'))">
-        <xsl:message terminate="no">
-          <xsl:text>Relator/constant '</xsl:text>
-          <xsl:value-of select="text()"/>
-          <xsl:text>' cannot be converted into the valid format.</xsl:text>
-        </xsl:message>
-      </xsl:if>
       <!-- escape \ and ' then single quote -->
       <xsl:value-of select='concat("&apos;",
         replace(replace(text(), "\\", "\\\\"), "&apos;", "\\&apos;"), "&apos;")'/>

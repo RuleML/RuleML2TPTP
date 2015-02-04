@@ -1,33 +1,33 @@
 fof(act1_formula1,axiom,(
-    $true
-)).
+    $true )).
+
 fof(act1_formula2,axiom,(
-    one
-)).
+    one )).
+
 fof(act1_formula3,axiom,
     ( one
-    & two )
-).
+    & two )).
+
 fof(act1_formula4,axiom,
     ( one
     & two
-    & three )
-).
+    & three )).
+
 fof(act1_formula5,axiom,
     ( one
     & ( two
-      | three ) )
-).
+      | three ) )).
+
 fof(act1_formula6,axiom,(
-    ! [X] : foo(X)
-)).
+    ! [X] : foo(X) )).
+
 fof(act2_formula1,conjecture,(
     ! [X] :
       ( X = ruleml
-      & foo )
-)).
+      & foo ) )).
+
 fof(act2_formula2,conjecture,(
     ! [X] :
       ( ? [Y] : X = Y
-      & foo(X) )
-)).
+      & foo(X) ) )).
+

@@ -1,6 +1,6 @@
 package org.ruleml.translation.ruleml2tptp;
 
-import static junitx.framework.FileAssert.*;
+import static org.apache.commons.io.FileUtils.*;
 import static org.junit.Assert.*;
 
 import java.net.URISyntaxException;
@@ -40,14 +40,8 @@ public class TranslatorTest
     @Parameters(name="{index}: {0}")
     public static Object[] baseNames() {
         return new Object[] {
-            "Atom",
-            "Implies",
-            "Forall",
-            "Exists",
-            "Equal",
-            "And",
-            "Or",
-            "Expr"
+            "Atom", "Implies", "Forall", "Exists", "Equal", "And", "Or", "Expr",
+            "comments"
         };
     }
 
@@ -62,9 +56,12 @@ public class TranslatorTest
         final File input = new File(getClass().getResource("/TranslatorTest/" + baseName + "Test.ruleml").toURI());
         final File result = File.createTempFile("TranslatorTest_" + baseName + "Test_", ".tptp.tmp");
         translator.translate(new StreamSource(input), new StreamResult(result));
-        final File expected = new File(getClass().getResource("/TranslatorTest/" + baseName + "Test.tptp").toURI());
+        final String expected = readFileToString(
+                new File(getClass().getResource("/TranslatorTest/" + baseName + "Test.tptp").toURI()),
+                StandardCharsets.UTF_8);
         final String resultFilePath = result.getCanonicalPath();
-        assertEquals("Result file: " + resultFilePath, expected, result);
+        final String resultContent = readFileToString(result, StandardCharsets.UTF_8);
+        assertEquals("Result file: " + resultFilePath, expected, resultContent);
         assertTrue("Failed to delete " + resultFilePath, result.delete());
     }
 

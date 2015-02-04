@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ignored -->
+<RuleML xmlns="http://ruleml.org/spec">
+  <!--
+      RuleML: 1 line
+  -->
+  <act>
+    <!--
+
+        act: 1 blank line + 1 line -->
+    <!--
+
+        act: 1 blank line + 2 lines
+        %    indented by 4 spaces
+    -->
+    <Assert>
+      <!--
+
+          Assert: 1 blank line + 2 lines + 1 blank line
+          %    indented by 4 spaces
+
+      -->
+      <formula>
+        <!-- formula: 1 line -->
+        <!--
+            formula: 2 lines + 1 blank line
+            %    indented by 4 spaces
+
+        -->
+        <Atom>
+          <!-- ignored -->
+          <Rel><!-- ignored -->ruleml</Rel>
+          <!--
+               ignored -->
+        </Atom>
+        <!-- middle formula: 1 line -->
+        <Rel><!-- ignored: invalid RuleML, just for testing purpose -->org</Rel>
+        <!--
+            post-formula: 1 line  -->
+      </formula>
+      <formula>
+        <!-- another formula: 1 line -->
+        <Atom><Rel>x</Rel></Atom>
+      </formula>
+      <!--
+          post-Assert: 1 line -->
+    </Assert>
+    <!-- post-act: 1 line -->
+  </act>
+  <!--
+      post-RuleML: 2 lines
+      %    indented by 4 spaces
+  -->
+</RuleML>
+<!-- ignored  -->
