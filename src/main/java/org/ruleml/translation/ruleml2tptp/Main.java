@@ -6,9 +6,9 @@ import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -51,6 +51,9 @@ public class Main {
 
     @Option(name="-f",aliases={"-transformer-factory"},metaVar="<class>",usage="use given factory class")
     private String transFactoryClass;
+
+    @Option(name="-w",aliases={"-overwrite"},usage="overwrite the output file")
+    private boolean overwrite;
 
     @Option(name="-r",aliases={"-recursive"},hidden=true,usage="traverse the directory tree for input files")
     private boolean recursive;
@@ -106,6 +109,10 @@ public class Main {
         final Translator translator = new Translator(transFactory);
         translator.loadTemplates();
         try {
+            if (output != null && !overwrite && !output.createNewFile()) {
+                System.err.println("The output file has existed. Use option \"-w\" to overwrite it.");
+                System.exit(EC_GENERAL);
+            }
             if (input == null) {
                 if (output == null) {
                     translate(translator, System.in, System.out);
@@ -122,7 +129,7 @@ public class Main {
             System.err.println(ex.getMessageAndLocation());
             System.err.println();
             System.exit(EC_TRANSFORM);
-        } catch (FileNotFoundException ex) {
+        } catch (IOException ex) {
             System.err.println("Failed to operate file: " + ex.getLocalizedMessage());
             System.err.println();
             System.exit(EC_TRANSFORM);
