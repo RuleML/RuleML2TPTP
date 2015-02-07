@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<RuleML xmlns="http://ruleml.org/spec">
+  <Assert>
+    <Atom>
+      <Rel>Test TwoArgs</Rel>
+      <Var>x y z</Var>
+      <Ind>Ruleml.Org</Ind>
+      <Ind>"strange"\'thing'</Ind>
+    </Atom>
+    <Atom>
+      <Rel>TestTwoArgs</Rel>
+      <Ind>RulemlOrg</Ind>
+      <Var>xYZ</Var>
+    </Atom>
+    <Atom>
+      <Rel>
+        ruleml
+      </Rel>
+      <Ind>
+        org
+      </Ind>
+      <Var>
+        X
+      </Var>
+    </Atom>
+    <Atom>
+      <Rel>
+
+      </Rel>
+      <Ind>    </Ind>
+      <Var>
+
+      </Var>
+    </Atom>
+  </Assert>
+</RuleML>
