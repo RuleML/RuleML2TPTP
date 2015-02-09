@@ -228,6 +228,37 @@
 
 </xsl:template>
 
+<xsl:template match="r:Equivalent">
+  <xsl:param name="depth" required="yes" as="xs:integer" tunnel="yes"/>
+  <xsl:param name="line-breaking" required="yes" as="xs:boolean" tunnel="yes"/>
+
+  <xsl:if test="$line-breaking">
+    <xsl:call-template name="break-line">
+      <xsl:with-param name="depth" select="$depth"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:text>( </xsl:text>
+
+  <xsl:apply-templates select="r:torso[1]">
+    <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
+    <xsl:with-param name="line-breaking" select="false()" tunnel="yes"/>
+  </xsl:apply-templates>
+
+  <xsl:call-template name="break-line">
+    <xsl:with-param name="depth" select="$depth"/>
+    <xsl:with-param name="retreat" select="2"/>
+  </xsl:call-template>
+  <xsl:text>&lt;=> </xsl:text>
+
+  <xsl:apply-templates select="r:torso[last()]">
+    <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
+    <xsl:with-param name="line-breaking" select="false()" tunnel="yes"/>
+  </xsl:apply-templates>
+
+  <xsl:text> )</xsl:text>
+
+</xsl:template>
+
 <xsl:template match="r:Equal">
   <xsl:apply-templates select="r:left"/>
   <xsl:text> = </xsl:text>
