@@ -197,6 +197,24 @@
 
 </xsl:template>
 
+<xsl:template match="r:Neg">
+  <xsl:param name="depth" required="yes" as="xs:integer" tunnel="yes"/>
+  <xsl:param name="line-breaking" required="yes" as="xs:boolean" tunnel="yes"/>
+
+  <xsl:if test="$line-breaking">
+    <xsl:call-template name="break-line">
+      <xsl:with-param name="depth" select="$depth"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:text>~ </xsl:text>
+
+  <xsl:apply-templates select="r:strong">
+    <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
+    <xsl:with-param name="line-breaking" select="false()" tunnel="yes"/>
+  </xsl:apply-templates>
+
+</xsl:template>
+
 <xsl:template match="r:Implies">
   <xsl:param name="depth" required="yes" as="xs:integer" tunnel="yes"/>
   <xsl:param name="line-breaking" required="yes" as="xs:boolean" tunnel="yes"/>

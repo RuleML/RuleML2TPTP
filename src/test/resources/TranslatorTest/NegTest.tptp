@@ -1,0 +1,19 @@
+fof(act1_formula1,axiom,(
+    ~ foo(a) )).
+
+fof(act2_formula1,conjecture,(
+    ~ ~ foo(a) )).
+
+fof(act3_formula1,axiom,
+    ( ~ ( bar
+        & bax )
+   => ~ bay )).
+
+fof(act3_formula2,axiom,(
+    ! [X] :
+      ~ ( foo(X)
+      <=> bar ) )).
+
+fof(act4_formula1,conjecture,(
+    ~ ? [X] : X = bar )).
+
