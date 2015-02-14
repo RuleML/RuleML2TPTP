@@ -4,6 +4,8 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:r="http://ruleml.org/spec">
+<!-- The input of this translator must be a normalized RuleML instance. -->
+
 <!-- line break -->
 <xsl:param name="nl" select="'&#xA;'" as="xs:string" required="no"/>
 
@@ -226,21 +228,42 @@
   </xsl:if>
   <xsl:text>( </xsl:text>
 
-  <xsl:apply-templates select="r:if">
-    <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
-    <xsl:with-param name="line-breaking" select="false()" tunnel="yes"/>
-  </xsl:apply-templates>
+  <xsl:choose>
+    <xsl:when test="(r:if | r:then)[1] = r:if">
+      <xsl:apply-templates select="r:if">
+        <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
+        <xsl:with-param name="line-breaking" select="false()" tunnel="yes"/>
+      </xsl:apply-templates>
 
-  <xsl:call-template name="break-line">
-    <xsl:with-param name="depth" select="$depth"/>
-    <xsl:with-param name="retreat" select="1"/>
-  </xsl:call-template>
-  <xsl:text>=> </xsl:text>
+      <xsl:call-template name="break-line">
+        <xsl:with-param name="depth" select="$depth"/>
+        <xsl:with-param name="retreat" select="1"/>
+      </xsl:call-template>
+      <xsl:text>=> </xsl:text>
 
-  <xsl:apply-templates select="r:then">
-    <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
-    <xsl:with-param name="line-breaking" select="false()" tunnel="yes"/>
-  </xsl:apply-templates>
+      <xsl:apply-templates select="r:then">
+        <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
+        <xsl:with-param name="line-breaking" select="false()" tunnel="yes"/>
+      </xsl:apply-templates>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="r:then">
+        <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
+        <xsl:with-param name="line-breaking" select="false()" tunnel="yes"/>
+      </xsl:apply-templates>
+
+      <xsl:call-template name="break-line">
+        <xsl:with-param name="depth" select="$depth"/>
+        <xsl:with-param name="retreat" select="1"/>
+      </xsl:call-template>
+      <xsl:text>&lt;= </xsl:text>
+
+      <xsl:apply-templates select="r:if">
+        <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
+        <xsl:with-param name="line-breaking" select="false()" tunnel="yes"/>
+      </xsl:apply-templates>
+    </xsl:otherwise>
+  </xsl:choose>
 
   <xsl:text> )</xsl:text>
 

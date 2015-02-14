@@ -1,8 +1,12 @@
-fof(act1_formula1,conjecture,
+fof(act1_formula1,axiom,
     ( testNotNested(ruleml)
    => foo(ruleml) )).
 
-fof(act2_formula1,axiom,(
+fof(act2_formula1,conjecture,
+    ( testNotNested(ruleml)
+   => foo(ruleml) )).
+
+fof(act3_formula1,axiom,(
     ! [X] :
       ( testNested(X)
      => foo(X) ) )).
