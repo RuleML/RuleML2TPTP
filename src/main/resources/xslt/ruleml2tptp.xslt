@@ -364,7 +364,7 @@
 </xsl:template>
 
 <!-- constants and functors in the TPTP language start with a lowercase letter or is single-quoted -->
-<xsl:template match="r:Rel | r:Ind">
+<xsl:template match="r:Rel | r:Ind | r:Fun">
   <xsl:variable name="normalized-text" select="normalize-space(text())" as="xs:string"/>
   <xsl:choose>
     <xsl:when test="matches($normalized-text, '^[a-z][a-z0-9_]*$', 'i')">
