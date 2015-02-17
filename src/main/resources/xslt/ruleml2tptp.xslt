@@ -289,7 +289,7 @@
     <xsl:with-param name="depth" select="$depth"/>
     <xsl:with-param name="retreat" select="2"/>
   </xsl:call-template>
-  <xsl:text>&lt;=> </xsl:text>
+  <xsl:text>&lt;=&gt; </xsl:text>
 
   <xsl:apply-templates select="r:torso[last()]">
     <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
