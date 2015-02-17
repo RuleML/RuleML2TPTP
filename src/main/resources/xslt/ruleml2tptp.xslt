@@ -239,7 +239,7 @@
         <xsl:with-param name="depth" select="$depth"/>
         <xsl:with-param name="retreat" select="1"/>
       </xsl:call-template>
-      <xsl:text>=> </xsl:text>
+      <xsl:text>=&gt; </xsl:text>
 
       <xsl:apply-templates select="r:then">
         <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
