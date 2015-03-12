@@ -361,7 +361,7 @@
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="r:Atom | r:Expr">
+<xsl:template match="r:Atom | r:Expr"> <!-- Expr belongs to FOL (rather than Hornlog+). -->
   <xsl:apply-templates select="r:op"/>
   <!-- sorted args -->
   <xsl:for-each select="r:arg">
@@ -387,16 +387,17 @@
 </xsl:template>
 
 <!-- constants and functors in the TPTP language start with a lowercase letter or is single-quoted -->
-<xsl:template match="r:Rel | r:Ind | r:Fun">
-  <xsl:variable name="normalized-text" select="normalize-space(text())" as="xs:string"/>
+<xsl:template match="r:Rel | r:Ind | r:Fun"> <!-- Fun belongs to FOL (rather than Hornlog+). -->
   <xsl:choose>
-    <xsl:when test="matches($normalized-text, '^[a-z][a-z0-9_]*$', 'i')">
-      <xsl:value-of select="concat(lower-case(substring($normalized-text, 1, 1)), substring($normalized-text, 2))"/>
+    <xsl:when test="string(@iri)">
+      <xsl:call-template name="normalize-text">
+        <xsl:with-param name="text" select="@iri"/>
+      </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
-      <!-- escape \ and ' then single quote -->
-      <xsl:value-of select='concat("&apos;",
-        replace(replace(text(), "\\", "\\\\"), "&apos;", "\\&apos;"), "&apos;")'/>
+      <xsl:call-template name="normalize-text">
+        <xsl:with-param name="text" select="string(text())"/>
+      </xsl:call-template>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -409,6 +410,22 @@
     </xsl:if>
     <xsl:apply-templates select="r:Var"/>
   </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="normalize-text">
+  <xsl:param name="text" required="yes" as="xs:string"/>
+
+  <xsl:variable name="normalized-text" select="normalize-space($text)" as="xs:string"/>
+  <xsl:choose>
+    <xsl:when test="matches($normalized-text, '^[a-z][a-z0-9_]*$', 'i')">
+      <xsl:value-of select="concat(lower-case(substring($normalized-text, 1, 1)), substring($normalized-text, 2))"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- escape \ and ' then single quote -->
+      <xsl:value-of select='concat("&apos;",
+        replace(replace($text, "\\", "\\\\"), "&apos;", "\\&apos;"), "&apos;")'/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>

@@ -1,0 +1,6 @@
+fof(act1_formula1,axiom,(
+    'http://test.iri.ruleml/translate?target=tptp'('any thing',ordinary('\'single quoted \\ word\'')) )).
+
+fof(act2_formula1,conjecture,(
+    'http://test.iri.ruleml/translate?target=tptp'(visible,ordinary('\'single quoted \\ word\'')) )).
+
