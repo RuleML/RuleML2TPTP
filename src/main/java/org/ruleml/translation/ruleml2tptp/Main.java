@@ -49,14 +49,8 @@ public class Main {
     @Option(name="-o",aliases={"-output"},metaVar="<path>",usage="use given output path (the standard output by default)")
     private File output;
 
-    @Option(name="-f",aliases={"-transformer-factory"},metaVar="<class>",usage="use given factory class")
-    private String transFactoryClass;
-
     @Option(name="-w",aliases={"-overwrite"},usage="overwrite the output file")
     private boolean overwrite;
-
-    @Option(name="-r",aliases={"-recursive"},hidden=true,usage="traverse the directory tree for input files")
-    private boolean recursive;
 
     @Argument
     private String input;
@@ -75,12 +69,8 @@ public class Main {
             System.exit(EC_GENERAL);
         }
         try {
-            if (appMain.transFactoryClass == null) {
-                appMain.transFactory = (SAXTransformerFactory) (SAXTransformerFactory.newInstance());
-            } else {
-                appMain.transFactory = (SAXTransformerFactory) (SAXTransformerFactory.newInstance(
-                            appMain.transFactoryClass, Main.class.getClassLoader()));
-            }
+            appMain.transFactory =
+                (SAXTransformerFactory) (SAXTransformerFactory.newInstance());
         } catch (TransformerFactoryConfigurationError err) {
             throw new IllegalStateException(err);
         }

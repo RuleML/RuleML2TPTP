@@ -34,4 +34,37 @@
       </Var>
     </Atom>
   </Assert>
+  <Query>
+    <Expr>
+      <Fun>Test TwoArgs</Fun>
+      <Var>x y z</Var>
+      <Ind>Ruleml.Org</Ind>
+      <Ind>"strange"\'thing'</Ind>
+    </Expr>
+    <Expr>
+      <Fun>TestTwoArgs</Fun>
+      <Ind>RulemlOrg</Ind>
+      <Var>xYZ</Var>
+    </Expr>
+    <Expr>
+      <Fun>
+        ruleml
+      </Fun>
+      <Ind>
+        org
+      </Ind>
+      <Var>
+        X
+      </Var>
+    </Expr>
+    <Expr>
+      <Fun>
+
+      </Fun>
+      <Ind>    </Ind>
+      <Var>
+
+      </Var>
+    </Expr>
+  </Query>
 </RuleML>

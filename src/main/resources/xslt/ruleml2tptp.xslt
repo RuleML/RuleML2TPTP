@@ -4,6 +4,8 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:r="http://ruleml.org/spec">
+<!-- The input of this translator must be a normalized RuleML instance. -->
+
 <!-- line break -->
 <xsl:param name="nl" select="'&#xA;'" as="xs:string" required="no"/>
 
@@ -197,6 +199,24 @@
 
 </xsl:template>
 
+<xsl:template match="r:Neg">
+  <xsl:param name="depth" required="yes" as="xs:integer" tunnel="yes"/>
+  <xsl:param name="line-breaking" required="yes" as="xs:boolean" tunnel="yes"/>
+
+  <xsl:if test="$line-breaking">
+    <xsl:call-template name="break-line">
+      <xsl:with-param name="depth" select="$depth"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:text>~ </xsl:text>
+
+  <xsl:apply-templates select="r:strong">
+    <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
+    <xsl:with-param name="line-breaking" select="false()" tunnel="yes"/>
+  </xsl:apply-templates>
+
+</xsl:template>
+
 <xsl:template match="r:Implies">
   <xsl:param name="depth" required="yes" as="xs:integer" tunnel="yes"/>
   <xsl:param name="line-breaking" required="yes" as="xs:boolean" tunnel="yes"/>
@@ -208,18 +228,70 @@
   </xsl:if>
   <xsl:text>( </xsl:text>
 
-  <xsl:apply-templates select="r:if">
+  <xsl:choose>
+    <xsl:when test="(r:if | r:then)[1] = r:if">
+      <xsl:apply-templates select="r:if">
+        <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
+        <xsl:with-param name="line-breaking" select="false()" tunnel="yes"/>
+      </xsl:apply-templates>
+
+      <xsl:call-template name="break-line">
+        <xsl:with-param name="depth" select="$depth"/>
+        <xsl:with-param name="retreat" select="1"/>
+      </xsl:call-template>
+      <xsl:text>=&gt; </xsl:text>
+
+      <xsl:apply-templates select="r:then">
+        <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
+        <xsl:with-param name="line-breaking" select="false()" tunnel="yes"/>
+      </xsl:apply-templates>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="r:then">
+        <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
+        <xsl:with-param name="line-breaking" select="false()" tunnel="yes"/>
+      </xsl:apply-templates>
+
+      <xsl:call-template name="break-line">
+        <xsl:with-param name="depth" select="$depth"/>
+        <xsl:with-param name="retreat" select="1"/>
+      </xsl:call-template>
+      <xsl:text>&lt;= </xsl:text>
+
+      <xsl:apply-templates select="r:if">
+        <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
+        <xsl:with-param name="line-breaking" select="false()" tunnel="yes"/>
+      </xsl:apply-templates>
+    </xsl:otherwise>
+  </xsl:choose>
+
+  <xsl:text> )</xsl:text>
+
+</xsl:template>
+
+<xsl:template match="r:Equivalent">
+  <xsl:param name="depth" required="yes" as="xs:integer" tunnel="yes"/>
+  <xsl:param name="line-breaking" required="yes" as="xs:boolean" tunnel="yes"/>
+
+  <xsl:if test="$line-breaking">
+    <xsl:call-template name="break-line">
+      <xsl:with-param name="depth" select="$depth"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:text>( </xsl:text>
+
+  <xsl:apply-templates select="r:torso[1]">
     <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
     <xsl:with-param name="line-breaking" select="false()" tunnel="yes"/>
   </xsl:apply-templates>
 
   <xsl:call-template name="break-line">
     <xsl:with-param name="depth" select="$depth"/>
-    <xsl:with-param name="retreat" select="1"/>
+    <xsl:with-param name="retreat" select="2"/>
   </xsl:call-template>
-  <xsl:text>=> </xsl:text>
+  <xsl:text>&lt;=&gt; </xsl:text>
 
-  <xsl:apply-templates select="r:then">
+  <xsl:apply-templates select="r:torso[last()]">
     <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
     <xsl:with-param name="line-breaking" select="false()" tunnel="yes"/>
   </xsl:apply-templates>
@@ -289,7 +361,7 @@
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="r:Atom | r:Expr">
+<xsl:template match="r:Atom | r:Expr"> <!-- Expr belongs to FOL (rather than Hornlog+). -->
   <xsl:apply-templates select="r:op"/>
   <!-- sorted args -->
   <xsl:for-each select="r:arg">
@@ -315,16 +387,17 @@
 </xsl:template>
 
 <!-- constants and functors in the TPTP language start with a lowercase letter or is single-quoted -->
-<xsl:template match="r:Rel | r:Ind">
-  <xsl:variable name="normalized-text" select="normalize-space(text())" as="xs:string"/>
+<xsl:template match="r:Rel | r:Ind | r:Fun"> <!-- Fun belongs to FOL (rather than Hornlog+). -->
   <xsl:choose>
-    <xsl:when test="matches($normalized-text, '^[a-z][a-z0-9_]*$', 'i')">
-      <xsl:value-of select="concat(lower-case(substring($normalized-text, 1, 1)), substring($normalized-text, 2))"/>
+    <xsl:when test="string(@iri)">
+      <xsl:call-template name="normalize-text">
+        <xsl:with-param name="text" select="@iri"/>
+      </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
-      <!-- escape \ and ' then single quote -->
-      <xsl:value-of select='concat("&apos;",
-        replace(replace(text(), "\\", "\\\\"), "&apos;", "\\&apos;"), "&apos;")'/>
+      <xsl:call-template name="normalize-text">
+        <xsl:with-param name="text" select="string(text())"/>
+      </xsl:call-template>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -337,6 +410,22 @@
     </xsl:if>
     <xsl:apply-templates select="r:Var"/>
   </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="normalize-text">
+  <xsl:param name="text" required="yes" as="xs:string"/>
+
+  <xsl:variable name="normalized-text" select="normalize-space($text)" as="xs:string"/>
+  <xsl:choose>
+    <xsl:when test="matches($normalized-text, '^[a-z][a-z0-9_]*$', 'i')">
+      <xsl:value-of select="concat(lower-case(substring($normalized-text, 1, 1)), substring($normalized-text, 2))"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- escape \ and ' then single quote -->
+      <xsl:value-of select='concat("&apos;",
+        replace(replace($text, "\\", "\\\\"), "&apos;", "\\&apos;"), "&apos;")'/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>

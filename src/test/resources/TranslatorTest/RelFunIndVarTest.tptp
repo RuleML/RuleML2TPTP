@@ -1,0 +1,24 @@
+fof(act1_formula1,axiom,(
+    'Test TwoArgs'(X y z,'Ruleml.Org','"strange"\\\'thing\'') )).
+
+fof(act1_formula2,axiom,(
+    testTwoArgs(rulemlOrg,XYZ) )).
+
+fof(act1_formula3,axiom,(
+    ruleml(org,X) )).
+
+fof(act1_formula4,axiom,(
+    ''('',) )).
+
+fof(act2_formula1,conjecture,(
+    'Test TwoArgs'(X y z,'Ruleml.Org','"strange"\\\'thing\'') )).
+
+fof(act2_formula2,conjecture,(
+    testTwoArgs(rulemlOrg,XYZ) )).
+
+fof(act2_formula3,conjecture,(
+    ruleml(org,X) )).
+
+fof(act2_formula4,conjecture,(
+    ''('',) )).
+

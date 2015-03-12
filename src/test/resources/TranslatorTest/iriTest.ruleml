@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<RuleML xmlns="http://ruleml.org/spec">
+  <Assert>
+    <Atom>
+      <Rel iri="http://test.iri.ruleml/translate?target=tptp"/>
+      <Ind iri="any thing"/>
+      <Expr>
+        <Fun iri="ordinary"/>
+        <Ind iri="'single quoted \ word'"/>
+      </Expr>
+    </Atom>
+  </Assert>
+  <Query>
+    <Atom>
+      <Rel iri="http://test.iri.ruleml/translate?target=tptp">invisible</Rel>
+      <Ind iri="">visible</Ind>
+      <Expr>
+        <Fun iri="ordinary">invisible</Fun>
+        <Ind iri="'single quoted \ word'">invisible</Ind>
+      </Expr>
+    </Atom>
+  </Query>
+</RuleML>

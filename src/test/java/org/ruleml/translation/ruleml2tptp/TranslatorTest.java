@@ -41,7 +41,7 @@ public class TranslatorTest
     public static Object[] baseNames() {
         return new Object[] {
             "Atom", "Implies", "Forall", "Exists", "Equal", "And", "Or", "Expr",
-            "RelIndVar", "comments"
+            "RelFunIndVar", "comments", "Equivalent", "Neg", "iri"
         };
     }
 

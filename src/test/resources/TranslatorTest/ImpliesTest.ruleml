@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <RuleML xmlns="http://ruleml.org/spec">
+  <Assert>
+    <Implies>
+      <then>
+        <Atom>
+          <Rel>foo</Rel>
+          <Ind>ruleml</Ind>
+        </Atom>
+      </then>
+      <!-- "<=" can not appear in the result because of the normalizer. -->
+      <if>
+        <Atom>
+          <Rel>testNotNested</Rel>
+          <Ind>ruleml</Ind>
+        </Atom>
+      </if>
+    </Implies>
+  </Assert>
   <Query>
     <Implies>
       <Atom>

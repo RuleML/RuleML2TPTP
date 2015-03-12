@@ -224,7 +224,7 @@
      r:Entails/*[namespace-uri(.)='http://ruleml.org/spec'
        and position()=last()]"
     mode="phase-1">
-   <!-- <xsl:comment>last</xsl:comment>-->
+    <!--<xsl:comment>last</xsl:comment>-->
     <xsl:choose>
       <xsl:when test="local-name()='if' or local-name()='then'">
         <xsl:call-template name="copy-1"/>
@@ -343,7 +343,7 @@
 
 
   <!-- Note: Some of these templates may be combined. -->
-  <!-- Builds canonically-ordered content of Assert or Retract. -->
+  <!-- Builds canonically-ordered content of Retract. -->
   <xsl:template match="r:Retract|r:Assert" mode="phase-2">
     <xsl:copy>
       <xsl:apply-templates select="@*"/>
@@ -634,13 +634,23 @@
   <!-- For Implies -->
   <!-- Makes @material explicit. -->
   <!-- Makes @direction explicit. -->
-  <xsl:template match="r:Implies[not(@material) or not(@direction)]" mode="phase-3">
+  <!-- Makes @mapMaterial explicit. -->
+  <!-- Makes @mapDirection explicit. -->
+  <xsl:template
+    match="r:Implies[not(@material) or not(@direction) or not(@mapMaterial) or not(@mapDirection)]"
+    mode="phase-3">
     <xsl:copy>
       <xsl:if test="not(@material)">
         <xsl:attribute name="material">yes</xsl:attribute>
       </xsl:if>
       <xsl:if test="not(@direction)">
         <xsl:attribute name="direction">bidirectional</xsl:attribute>
+      </xsl:if>
+      <xsl:if test="not(@mapMaterial)">
+        <xsl:attribute name="mapMaterial">yes</xsl:attribute>
+      </xsl:if>
+      <xsl:if test="not(@mapDirection)">
+        <xsl:attribute name="mapDirection">bidirectional</xsl:attribute>
       </xsl:if>
       <xsl:apply-templates select="node() | @*" mode="phase-3"/>
     </xsl:copy>
@@ -664,7 +674,129 @@
   <!-- For Retract -->
   <!-- Makes @mapMaterial explicit. -->
   <!-- Makes @mapDirection explicit. -->
-  <xsl:template match="r:Retract[not(@mapMaterial) or not(@mapDirection)]" mode="phase-3">
+  <xsl:template
+    match="r:Retract[not(@material) or not(@direction) or not(@mapMaterial) or not(@mapDirection)]"
+    mode="phase-3">
+    <xsl:copy>
+      <xsl:if test="not(@mapMaterial)">
+        <xsl:attribute name="mapMaterial">yes</xsl:attribute>
+      </xsl:if>
+      <xsl:if test="not(@mapDirection)">
+        <xsl:attribute name="mapDirection">bidirectional</xsl:attribute>
+      </xsl:if>
+      <xsl:apply-templates select="node() | @*" mode="phase-3"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <!-- for Query -->
+  <!-- Makes @mapMaterial explicit. -->
+  <!-- Makes @mapDirection explicit. -->
+  <xsl:template match="r:Query[not(@mapMaterial) or not(@mapDirection)]" mode="phase-3">
+    <xsl:copy>
+      <xsl:if test="not(@mapMaterial)">
+        <xsl:attribute name="mapMaterial">yes</xsl:attribute>
+      </xsl:if>
+      <xsl:if test="not(@mapDirection)">
+        <xsl:attribute name="mapDirection">bidirectional</xsl:attribute>
+      </xsl:if>
+      <xsl:apply-templates select="node() | @*" mode="phase-3"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <!-- for Equivalent -->
+  <!-- Makes @mapMaterial explicit. -->
+  <!-- Makes @mapDirection explicit. -->
+  <xsl:template match="r:Equivalent[not(@mapMaterial) or not(@mapDirection)]" mode="phase-3">
+    <xsl:copy>
+      <xsl:if test="not(@mapMaterial)">
+        <xsl:attribute name="mapMaterial">yes</xsl:attribute>
+      </xsl:if>
+      <xsl:if test="not(@mapDirection)">
+        <xsl:attribute name="mapDirection">bidirectional</xsl:attribute>
+      </xsl:if>
+      <xsl:apply-templates select="node() | @*" mode="phase-3"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <!-- for And -->
+  <!-- Makes @mapMaterial explicit. -->
+  <!-- Makes @mapDirection explicit. -->
+  <xsl:template match="r:And[not(@mapMaterial) or not(@mapDirection)]" mode="phase-3">
+    <xsl:copy>
+      <xsl:if test="not(@mapMaterial)">
+        <xsl:attribute name="mapMaterial">yes</xsl:attribute>
+      </xsl:if>
+      <xsl:if test="not(@mapDirection)">
+        <xsl:attribute name="mapDirection">bidirectional</xsl:attribute>
+      </xsl:if>
+      <xsl:apply-templates select="node() | @*" mode="phase-3"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <!-- for Or -->
+  <!-- Makes @mapMaterial explicit. -->
+  <!-- Makes @mapDirection explicit. -->
+  <xsl:template match="r:Or[not(@mapMaterial) or not(@mapDirection)]" mode="phase-3">
+    <xsl:copy>
+      <xsl:if test="not(@mapMaterial)">
+        <xsl:attribute name="mapMaterial">yes</xsl:attribute>
+      </xsl:if>
+      <xsl:if test="not(@mapDirection)">
+        <xsl:attribute name="mapDirection">bidirectional</xsl:attribute>
+      </xsl:if>
+      <xsl:apply-templates select="node() | @*" mode="phase-3"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <!-- for Naf -->
+  <!-- Makes @mapMaterial explicit. -->
+  <!-- Makes @mapDirection explicit. -->
+  <xsl:template match="r:Naf[not(@mapMaterial) or not(@mapDirection)]" mode="phase-3">
+    <xsl:copy>
+      <xsl:if test="not(@mapMaterial)">
+        <xsl:attribute name="mapMaterial">yes</xsl:attribute>
+      </xsl:if>
+      <xsl:if test="not(@mapDirection)">
+        <xsl:attribute name="mapDirection">bidirectional</xsl:attribute>
+      </xsl:if>
+      <xsl:apply-templates select="node() | @*" mode="phase-3"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <!-- for Neg -->
+  <!-- Makes @mapMaterial explicit. -->
+  <!-- Makes @mapDirection explicit. -->
+  <xsl:template match="r:Neg[not(@mapMaterial) or not(@mapDirection)]" mode="phase-3">
+    <xsl:copy>
+      <xsl:if test="not(@mapMaterial)">
+        <xsl:attribute name="mapMaterial">yes</xsl:attribute>
+      </xsl:if>
+      <xsl:if test="not(@mapDirection)">
+        <xsl:attribute name="mapDirection">bidirectional</xsl:attribute>
+      </xsl:if>
+      <xsl:apply-templates select="node() | @*" mode="phase-3"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <!-- for Forall -->
+  <!-- Makes @mapMaterial explicit. -->
+  <!-- Makes @mapDirection explicit. -->
+  <xsl:template match="r:Forall[not(@mapMaterial) or not(@mapDirection)]" mode="phase-3">
+    <xsl:copy>
+      <xsl:if test="not(@mapMaterial)">
+        <xsl:attribute name="mapMaterial">yes</xsl:attribute>
+      </xsl:if>
+      <xsl:if test="not(@mapDirection)">
+        <xsl:attribute name="mapDirection">bidirectional</xsl:attribute>
+      </xsl:if>
+      <xsl:apply-templates select="node() | @*" mode="phase-3"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <!-- for Exists -->
+  <!-- Makes @mapMaterial explicit. -->
+  <!-- Makes @mapDirection explicit. -->
+  <xsl:template match="r:Exists[not(@mapMaterial) or not(@mapDirection)]" mode="phase-3">
     <xsl:copy>
       <xsl:if test="not(@mapMaterial)">
         <xsl:attribute name="mapMaterial">yes</xsl:attribute>

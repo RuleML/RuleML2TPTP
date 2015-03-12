@@ -1,0 +1,10 @@
+fof(act1_formula1,axiom,(
+    ! [Person,Object] :
+      ( own(Person,Object)
+    <=> belongs(Object,Person) ) )).
+
+fof(act2_formula1,conjecture,
+    ( foo(a)
+  <=> ( fop
+    <=> foq ) )).
+
