@@ -199,7 +199,7 @@
 
 </xsl:template>
 
-<xsl:template match="r:Neg">
+<xsl:template match="r:Neg"> <!-- FOL -->
   <xsl:param name="depth" required="yes" as="xs:integer" tunnel="yes"/>
   <xsl:param name="line-breaking" required="yes" as="xs:boolean" tunnel="yes"/>
 
@@ -269,7 +269,7 @@
 
 </xsl:template>
 
-<xsl:template match="r:Equivalent">
+<xsl:template match="r:Equivalent"> <!-- FOL -->
   <xsl:param name="depth" required="yes" as="xs:integer" tunnel="yes"/>
   <xsl:param name="line-breaking" required="yes" as="xs:boolean" tunnel="yes"/>
 
@@ -361,7 +361,7 @@
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="r:Atom | r:Expr"> <!-- Expr belongs to FOL (rather than Hornlog+). -->
+<xsl:template match="r:Atom | r:Expr"> <!-- Expr is in Hornlog. -->
   <xsl:apply-templates select="r:op"/>
   <!-- sorted args -->
   <xsl:for-each select="r:arg">
@@ -387,7 +387,7 @@
 </xsl:template>
 
 <!-- constants and functors in the TPTP language start with a lowercase letter or is single-quoted -->
-<xsl:template match="r:Rel | r:Ind | r:Fun"> <!-- Fun belongs to FOL (rather than Hornlog+). -->
+<xsl:template match="r:Rel | r:Ind | r:Fun"> <!-- Fun is in Hornlog. -->
   <xsl:choose>
     <xsl:when test="string(@iri)">
       <xsl:call-template name="normalize-text">
