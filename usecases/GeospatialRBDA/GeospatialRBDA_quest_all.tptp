@@ -1,0 +1,391 @@
+fof(act1_formula1,axiom,(
+    ! [Alt,Class,Src,Y,X,Plot] :
+      ( ( eligiblePlot(Plot)
+        & source(Plot,Src)
+        & location(Plot,X,Y)
+        & altitude(Plot,Alt)
+        & treeStandClass(Plot,Class) )
+     => plotsStatic(Plot,Src,X,Y,Alt,Class) ) )).
+
+fof(act1_formula2,axiom,(
+    ! [Id,Pct,Sg,Plot] :
+      ( ( eligiblePlot(Plot)
+        & treeStandKey(Id,Plot,Sg)
+        & treeStandAbundance(Id,Pct) )
+     => sGAbundance(Plot,Sg,Pct) ) )).
+
+fof(act1_formula3,axiom,(
+    ! [Src2,Src1,Alt1,Alt2,Class1,Class2,Y1,Y2,X2,X1,Plot] :
+      ( ( plotsStatic(Plot,Src1,X1,Y1,Alt1,Class1)
+        & plotsStatic(Plot,Src2,X2,Y2,Alt2,Class2) )
+     => Src1 = Src2 ) )).
+
+fof(act1_formula4,axiom,(
+    ! [Src2,Src1,Alt1,Alt2,Class1,Class2,Y1,Y2,X2,Plot,X1] :
+      ( ( plotsStatic(Plot,Src1,X1,Y1,Alt1,Class1)
+        & plotsStatic(Plot,Src2,X2,Y2,Alt2,Class2) )
+     => X1 = X2 ) )).
+
+fof(act1_formula5,axiom,(
+    ! [Src2,Src1,Alt1,Alt2,Class1,Class2,Y1,Y2,X2,X1,Plot] :
+      ( ( plotsStatic(Plot,Src1,X1,Y1,Alt1,Class1)
+        & plotsStatic(Plot,Src2,X2,Y2,Alt2,Class2) )
+     => Y1 = Y2 ) )).
+
+fof(act1_formula6,axiom,(
+    ! [Src2,Src1,Alt1,Class1,Alt2,Class2,Y1,Y2,X2,X1,Plot] :
+      ( ( plotsStatic(Plot,Src1,X1,Y1,Alt1,Class1)
+        & plotsStatic(Plot,Src2,X2,Y2,Alt2,Class2) )
+     => Alt1 = Alt2 ) )).
+
+fof(act1_formula7,axiom,(
+    ! [Src2,Src1,Alt1,Alt2,Class1,Class2,Y1,Y2,X2,X1,Plot] :
+      ( ( plotsStatic(Plot,Src1,X1,Y1,Alt1,Class1)
+        & plotsStatic(Plot,Src2,X2,Y2,Alt2,Class2) )
+     => Class1 = Class2 ) )).
+
+fof(act1_formula8,axiom,(
+    ! [Pct1,Pct2,Sg,Plot] :
+      ( ( sGAbundance(Plot,Sg,Pct1)
+        & sGAbundance(Plot,Sg,Pct2) )
+     => Pct1 = Pct2 ) )).
+
+fof(act1_formula9,axiom,(
+    ! [Plot] :
+      ( ( independentPlot(Plot)
+        & preEligiblePlot(Plot) )
+     => eligiblePlot(Plot) ) )).
+
+fof(act1_formula10,axiom,(
+    ! [Id,Sg,Plot] :
+      ( ( lightlyManagedPlot(Plot)
+        & treeStandKey(Id,Plot,Sg)
+        & pureTreeStand(Id) )
+     => preEligiblePlot(Plot) ) )).
+
+fof(act1_formula11,axiom,(
+    ! [Id,Sg,Plot] :
+      ( ( lightlyManagedPlot(Plot)
+        & treeStandKey(Id,Plot,Sg)
+        & mixedTreeStand(Id) )
+     => preEligiblePlot(Plot) ) )).
+
+fof(act1_formula12,axiom,(
+    ! [Plot] :
+      ( source(Plot,nwr)
+     => independentPlot(Plot) ) )).
+
+fof(act1_formula13,axiom,(
+    ! [Plot] :
+      ( source(Plot,lwf)
+     => independentPlot(Plot) ) )).
+
+fof(act1_formula14,axiom,(
+    ! [Plot] :
+      ( ( source(Plot,ekf)
+        & ~ possiblyDependentPlot(Plot) )
+     => independentPlot(Plot) ) )).
+
+fof(act1_formula15,axiom,(
+    ! [Dsq,Plot1,Plot2] :
+      ( ( plotDistance(Plot1,Plot2,Dsq)
+        & preEligiblePlot(Plot2)
+        & lESS(Dsq,'250000') )
+     => possiblyDependentPlot(Plot1) ) )).
+
+fof(act1_formula16,axiom,(
+    ! [Xsq,Y1,Y2,Ysq,X2,Dsq,Plot1,Plot2,Y,X,X1] :
+      ( ( source(Plot1,ekf)
+        & source(Plot2,ekf)
+        & location(Plot1,X1,Y1)
+        & location(Plot2,X2,Y2)
+        & sUBTRACT(X1,X2,X)
+        & sUBTRACT(Y1,Y2,Y)
+        & mULTIPLY(X,X,Xsq)
+        & mULTIPLY(Y,Y,Ysq)
+        & aDD(Xsq,Ysq,Dsq)
+        & gREATER(Dsq,'0') )
+     => plotDistance(Plot1,Plot2,Dsq) ) )).
+
+fof(act1_formula17,axiom,(
+    ! [Plot] :
+      ( forestManagement(Plot,b)
+     => lightlyManagedPlot(Plot) ) )).
+
+fof(act1_formula18,axiom,(
+    ! [Plot] :
+      ( forestManagement(Plot,a)
+     => lightlyManagedPlot(Plot) ) )).
+
+fof(act1_formula19,axiom,(
+    ! [Plot] :
+      ( forestManagement(Plot,'0')
+     => lightlyManagedPlot(Plot) ) )).
+
+fof(act1_formula20,axiom,(
+    ! [Plot] :
+      ( source(Plot,nwr)
+     => forestManagement(Plot,'0') ) )).
+
+fof(act1_formula21,axiom,(
+    ! [Id,Pct,Sg,Plot] :
+      ( ( treeStandAbundance(Id,Pct)
+        & treeStandKey(Id,Plot,Sg)
+        & speciesGroupOfInterest(Sg)
+        & gREATER_EQUAL(Pct,'70') )
+     => pureTreeStand(Id) ) )).
+
+fof(act1_formula22,axiom,(
+    ! [Id,Pct,Sg,Plot] :
+      ( ( treeStandAbundance(Id,Pct)
+        & treeStandKey(Id,Plot,Sg)
+        & speciesGroupOfInterest(Sg)
+        & ~ pureTreeStand(Id)
+        & gREATER_EQUAL(Pct,'15') )
+     => mixedTreeStand(Id) ) )).
+
+fof(act1_formula23,axiom,(
+    ! [Id,Sg,Plot] :
+      ( ( pureTreeStand(Id)
+        & treeStandKey(Id,Plot,Sg) )
+     => treeStandClass(Plot,pure) ) )).
+
+fof(act1_formula24,axiom,(
+    ! [Id,Sg,Plot] :
+      ( ( mixedTreeStand(Id)
+        & treeStandKey(Id,Plot,Sg) )
+     => treeStandClass(Plot,mixed) ) )).
+
+fof(act1_formula25,axiom,(
+    speciesGroupOfInterest(oak) )).
+
+fof(act1_formula26,axiom,(
+    speciesGroupOfInterest(beech) )).
+
+fof(act1_formula27,axiom,(
+    speciesGroupOfInterest(fir) )).
+
+fof(act1_formula28,axiom,(
+    speciesGroupOfInterest(spruce) )).
+
+fof(act1_formula29,axiom,(
+    speciesGroupOfInterest(pine) )).
+
+fof(act1_formula30,axiom,(
+    ! [Pct,Sg,Plot] :
+      ( treeStandMerged(Plot,Sg,Pct)
+     => treeStandKey(s(Plot,Sg,Pct),Plot,Sg) ) )).
+
+fof(act1_formula31,axiom,(
+    ! [Pct,Sg,Plot] :
+      ( treeStandMerged(Plot,Sg,Pct)
+     => treeStandAbundance(s(Plot,Sg,Pct),Pct) ) )).
+
+fof(act1_formula32,axiom,(
+    ! [Pct,Pct1,Pct2,Plot] :
+      ( ( eKFdom(Plot,'Quercus petraea',Pct1)
+        & eKFdom(Plot,'Quercus robur',Pct2)
+        & aDD(Pct1,Pct2,Pct) )
+     => treeStandMerged(Plot,oak,Pct) ) )).
+
+fof(act1_formula33,axiom,(
+    ! [Pct,Pct1,Pct2,Plot] :
+      ( ( nWRdom(Plot,'Quercus petraea',Pct1)
+        & nWRdom(Plot,'Quercus robur',Pct2)
+        & aDD(Pct1,Pct2,Pct) )
+     => treeStandMerged(Plot,oak,Pct) ) )).
+
+fof(act1_formula34,axiom,(
+    ! [Pct,Pct1,Pct2,Plot] :
+      ( ( lWFdom(Plot,'Quercus petraea',Pct1)
+        & lWFdom(Plot,'Quercus robur',Pct2)
+        & aDD(Pct1,Pct2,Pct) )
+     => treeStandMerged(Plot,oak,Pct) ) )).
+
+fof(act1_formula35,axiom,(
+    ! [Pct,Plot] :
+      ( eKFdom(Plot,'Fagus sylvatica',Pct)
+     => treeStandMerged(Plot,beech,Pct) ) )).
+
+fof(act1_formula36,axiom,(
+    ! [Pct,Plot] :
+      ( nWRdom(Plot,'Fagus sylvatica',Pct)
+     => treeStandMerged(Plot,beech,Pct) ) )).
+
+fof(act1_formula37,axiom,(
+    ! [Pct,Plot] :
+      ( lWFdom(Plot,'Fagus sylvatica',Pct)
+     => treeStandMerged(Plot,beech,Pct) ) )).
+
+fof(act1_formula38,axiom,(
+    ! [Pct,Plot] :
+      ( eKFdom(Plot,'Picea abies',Pct)
+     => treeStandMerged(Plot,spruce,Pct) ) )).
+
+fof(act1_formula39,axiom,(
+    ! [Pct,Plot] :
+      ( nWRdom(Plot,'Picea abies',Pct)
+     => treeStandMerged(Plot,spruce,Pct) ) )).
+
+fof(act1_formula40,axiom,(
+    ! [Pct,Plot] :
+      ( lWFdom(Plot,'Picea abies',Pct)
+     => treeStandMerged(Plot,spruce,Pct) ) )).
+
+fof(act1_formula41,axiom,(
+    ! [Pct,Plot] :
+      ( eKFdom(Plot,'Pinus sylvestris',Pct)
+     => treeStandMerged(Plot,pine,Pct) ) )).
+
+fof(act1_formula42,axiom,(
+    ! [Pct,Plot] :
+      ( nWRdom(Plot,'Pinus sylvestris',Pct)
+     => treeStandMerged(Plot,pine,Pct) ) )).
+
+fof(act1_formula43,axiom,(
+    ! [Pct,Plot] :
+      ( lWFdom(Plot,'Pinus sylvestris',Pct)
+     => treeStandMerged(Plot,pine,Pct) ) )).
+
+fof(act1_formula44,axiom,(
+    ! [Pct,Plot] :
+      ( eKFdom(Plot,'Abies alba',Pct)
+     => treeStandMerged(Plot,fir,Pct) ) )).
+
+fof(act1_formula45,axiom,(
+    ! [Pct,Plot] :
+      ( nWRdom(Plot,'Abies alba',Pct)
+     => treeStandMerged(Plot,fir,Pct) ) )).
+
+fof(act1_formula46,axiom,(
+    ! [Pct,Plot] :
+      ( lWFdom(Plot,'Abies alba',Pct)
+     => treeStandMerged(Plot,fir,Pct) ) )).
+
+fof(act1_formula47,axiom,(
+    ! [Y,X,Z,Plot] :
+      ( eKFvfl(Plot,Z,X,Y)
+     => location(Plot,X,Y) ) )).
+
+fof(act1_formula48,axiom,(
+    ! [Y,X,Z,Plot] :
+      ( nWRvfl(Plot,Z,X,Y)
+     => location(Plot,X,Y) ) )).
+
+fof(act1_formula49,axiom,(
+    ! [Y,X,Z,Plot] :
+      ( lWFvfl(Plot,Z,X,Y)
+     => location(Plot,X,Y) ) )).
+
+fof(act1_formula50,axiom,(
+    ! [AHC,D2,HGEM,Grade,D1,AJ,BA,BNR,SOZ,V7,HBER,Plot] :
+      ( eKFtrees(Plot,BNR,BA,AJ,Grade,AHC,D1,D2,V7,SOZ,HGEM,HBER)
+     => forestManagement(Plot,Grade) ) )).
+
+fof(act1_formula51,axiom,(
+    ! [AHC,D2,HGEM,Grade,D1,AJ,BA,BNR,SOZ,V7,HBER,Plot] :
+      ( lWFtrees(Plot,BNR,BA,AJ,Grade,AHC,D1,D2,V7,SOZ,HGEM,HBER)
+     => forestManagement(Plot,Grade) ) )).
+
+fof(act1_formula52,axiom,(
+    ! [Pct,Sg,Plot] :
+      ( eKFdom(Plot,Sg,Pct)
+     => source(Plot,ekf) ) )).
+
+fof(act1_formula53,axiom,(
+    ! [Pct,Sg,Plot] :
+      ( nWRdom(Plot,Sg,Pct)
+     => source(Plot,nwr) ) )).
+
+fof(act1_formula54,axiom,(
+    ! [Pct,Sg,Plot] :
+      ( lWFdom(Plot,Sg,Pct)
+     => source(Plot,lwf) ) )).
+
+fof(act1_formula55,axiom,(
+    ! [Y,X,Z,Plot] :
+      ( eKFvfl(Plot,Z,X,Y)
+     => altitude(Plot,Z) ) )).
+
+fof(act1_formula56,axiom,(
+    ! [Y,X,Z,Plot] :
+      ( nWRvfl(Plot,Z,X,Y)
+     => altitude(Plot,Z) ) )).
+
+fof(act1_formula57,axiom,(
+    ! [Y,X,Z,Plot] :
+      ( lWFvfl(Plot,Z,X,Y)
+     => altitude(Plot,Z) ) )).
+
+fof(act1_formula58,axiom,(
+    eKFdom('11983001','Quercus petraea','7') )).
+
+fof(act1_formula59,axiom,(
+    eKFdom('11983001','Quercus robur','8') )).
+
+fof(act1_formula60,axiom,(
+    eKFdom('11983002','Quercus petraea','3') )).
+
+fof(act1_formula61,axiom,(
+    eKFdom('11983002','Quercus robur','14') )).
+
+fof(act1_formula62,axiom,(
+    eKFdom('12193003','Picea abies','87') )).
+
+fof(act1_formula63,axiom,(
+    eKFdom('12193004','Picea abies','16') )).
+
+fof(act1_formula64,axiom,(
+    nWRdom('6003105','Picea abies','14') )).
+
+fof(act1_formula65,axiom,(
+    lWFdom('848006','Quercus petraea','9') )).
+
+fof(act1_formula66,axiom,(
+    lWFdom('848006','Quercus robur','11') )).
+
+fof(act1_formula67,axiom,(
+    eKFtrees('11983001','2820',oak,'1925','0','1','568','607','3.290','1','0.0','32.4') )).
+
+fof(act1_formula68,axiom,(
+    eKFtrees('11983002','2820',oak,'1925',pL,'1','568','607','3.290','1','0.0','32.4') )).
+
+fof(act1_formula69,axiom,(
+    eKFtrees('12193003','365',spruce,'1987',b,'1','796','796','4.670','0','36.7','35.9') )).
+
+fof(act1_formula70,axiom,(
+    eKFtrees('12193004','365',spruce,'1987','0','1','796','796','4.670','0','36.7','35.9') )).
+
+fof(act1_formula71,axiom,(
+    lWFtrees('848006','2820',oak,'1925',a,'1','568','607','3.290','1','0.0','32.4') )).
+
+fof(act1_formula72,axiom,(
+    eKFvfl('11983001','400','200000','600000') )).
+
+fof(act1_formula73,axiom,(
+    eKFvfl('11983002','500','201000','601000') )).
+
+fof(act1_formula74,axiom,(
+    eKFvfl('12193003','600','202000','602000') )).
+
+fof(act1_formula75,axiom,(
+    eKFvfl('12193004','420','200200','600200') )).
+
+fof(act1_formula76,axiom,(
+    nWRvfl('6003105','900','210000','610000') )).
+
+fof(act1_formula77,axiom,(
+    lWFvfl('848006','700','220000','620000') )).
+
+fof(act2_formula1,conjecture,(
+    ? [Pct,Plot] : sGAbundance(Plot,oak,Pct) )).
+
+fof(act2_formula2,conjecture,(
+    ? [Pct,Plot] : sGAbundance(Plot,spruce,Pct) )).
+
+fof(act2_formula3,conjecture,(
+    ? [Alt,Src,Y,X,Plot] : plotsStatic(Plot,Src,X,Y,Alt,pure) )).
+
+fof(act2_formula4,conjecture,(
+    ? [Alt,Src,Y,X,Plot] : plotsStatic(Plot,Src,X,Y,Alt,mixed) )).
+

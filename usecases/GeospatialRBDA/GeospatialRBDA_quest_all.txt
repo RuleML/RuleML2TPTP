@@ -1,0 +1,173 @@
+// Consolidation (external :- internal) rule:
+
+PlotsStatic(?plot,?src,?x,?y,?alt,?class) :- EligiblePlot(?plot),
+Source(?plot,?src),
+Location(?plot,?x,?y),
+Altitude(?plot,?alt),
+TreeStandClass(?plot,?class).
+
+SGAbundance(?plot,?sg,?pct) :- EligiblePlot(?plot),
+TreeStandKey(?id,?plot,?sg),
+TreeStandAbundance(?id,?pct).
+
+// Equality-rule key constraint of external predicate:
+
+?src1=?src2 :-
+PlotsStatic(?plot,?src1,?x1,?y1,?alt1,?class1),
+PlotsStatic(?plot,?src2,?x2,?y2,?alt2,?class2).
+?x1=?x2 :-
+PlotsStatic(?plot,?src1,?x1,?y1,?alt1,?class1),
+PlotsStatic(?plot,?src2,?x2,?y2,?alt2,?class2).
+?y1=?y2 :-
+PlotsStatic(?plot,?src1,?x1,?y1,?alt1,?class1),
+PlotsStatic(?plot,?src2,?x2,?y2,?alt2,?class2).
+?alt1=?alt2 :-
+PlotsStatic(?plot,?src1,?x1,?y1,?alt1,?class1),
+PlotsStatic(?plot,?src2,?x2,?y2,?alt2,?class2).
+?class1=?class2 :-
+PlotsStatic(?plot,?src1,?x1,?y1,?alt1,?class1),
+PlotsStatic(?plot,?src2,?x2,?y2,?alt2,?class2).
+
+?pct1=?pct2 :- SGAbundance(?plot,?sg,?pct1),
+SGAbundance(?plot,?sg,?pct2).
+
+// Concept-inclusion (internal :- internal) rules:
+
+EligiblePlot(?plot) :- IndependentPlot(?plot),
+PreEligiblePlot(?plot).
+PreEligiblePlot(?plot) :- LightlyManagedPlot(?plot),
+TreeStandKey(?id,?plot,?sg),
+PureTreeStand(?id).
+PreEligiblePlot(?plot) :- LightlyManagedPlot(?plot),
+TreeStandKey(?id,?plot,?sg),
+MixedTreeStand(?id).
+
+// Additional rules among internal predicates:
+
+IndependentPlot(?plot) :- Source(?plot,'nwr').
+IndependentPlot(?plot) :- Source(?plot,'lwf').
+IndependentPlot(?plot) :- Source(?plot,'ekf')
+and not PossiblyDependentPlot(?plot).
+
+PossiblyDependentPlot(?plot1) :- PlotDistance(?plot1,?plot2,?dsq),
+PreEligiblePlot(?plot2),
+LESS(?dsq,250000).
+
+PlotDistance(?plot1,?plot2,?dsq) :- Source(?plot1,'ekf'),
+Source(?plot2,'ekf'),
+Location(?plot1,?x1,?y1),
+Location(?plot2,?x2,?y2),
+SUBTRACT(?x1,?x2,?x),
+SUBTRACT(?y1,?y2,?y),
+MULTIPLY(?x,?x,?xsq),
+MULTIPLY(?y,?y,?ysq),
+ADD(?xsq,?ysq,?dsq),
+GREATER(?dsq,0).
+
+LightlyManagedPlot(?plot) :- ForestManagement(?plot,'B').
+LightlyManagedPlot(?plot) :- ForestManagement(?plot,'A').
+LightlyManagedPlot(?plot) :- ForestManagement(?plot,'0').
+ForestManagement(?plot,'0') :- Source(?plot,'nwr').
+
+PureTreeStand(?id) :- TreeStandAbundance(?id,?pct),
+TreeStandKey(?id,?plot,?sg),
+SpeciesGroupOfInterest(?sg),
+GREATER_EQUAL(?pct,70).
+
+MixedTreeStand(?id) :- TreeStandAbundance(?id,?pct),
+TreeStandKey(?id,?plot,?sg),
+SpeciesGroupOfInterest(?sg)
+and not PureTreeStand(?id),
+GREATER_EQUAL(?pct,15).
+
+TreeStandClass(?plot,'pure') :-PureTreeStand(?id),
+TreeStandKey(?id,?plot,?sg).
+TreeStandClass(?plot,'mixed') :- MixedTreeStand(?id),
+TreeStandKey(?id,?plot,?sg).
+
+SpeciesGroupOfInterest('oak').
+SpeciesGroupOfInterest('beech').
+SpeciesGroupOfInterest('fir').
+SpeciesGroupOfInterest('spruce').
+SpeciesGroupOfInterest('pine').
+
+// Rewriting of existential rule using Skolemization and splitting:
+
+TreeStandKey(s(?plot,?sg,?pct),?plot,?sg) :- TreeStandMerged(?plot,?sg,?pct).
+TreeStandAbundance(s(?plot,?sg,?pct),?pct) :- TreeStandMerged(?plot,?sg,?pct).
+
+// Rules mapping the local schemas of EKF, NWR, and LWF to the internal global predicates:
+
+TreeStandMerged(?plot,'oak',?pct) :- EKFdom(?plot,'Quercus petraea',?pct1),
+EKFdom(?plot,'Quercus robur',?pct2),
+ADD(?pct1,?pct2,?pct).
+TreeStandMerged(?plot,'oak',?pct) :- NWRdom(?plot,'Quercus petraea',?pct1),
+NWRdom(?plot,'Quercus robur',?pct2),
+ADD(?pct1,?pct2,?pct).
+TreeStandMerged(?plot,'oak',?pct) :- LWFdom(?plot,'Quercus petraea',?pct1),
+LWFdom(?plot,'Quercus robur',?pct2),
+ADD(?pct1,?pct2,?pct).
+TreeStandMerged(?plot,'beech',?pct) :- EKFdom(?plot,'Fagus sylvatica',?pct).
+TreeStandMerged(?plot,'beech',?pct) :- NWRdom(?plot,'Fagus sylvatica',?pct).
+TreeStandMerged(?plot,'beech',?pct) :- LWFdom(?plot,'Fagus sylvatica',?pct).
+TreeStandMerged(?plot,'spruce',?pct) :- EKFdom(?plot,'Picea abies',?pct).
+TreeStandMerged(?plot,'spruce',?pct) :- NWRdom(?plot,'Picea abies',?pct).
+TreeStandMerged(?plot,'spruce',?pct) :- LWFdom(?plot,'Picea abies',?pct).
+TreeStandMerged(?plot,'pine',?pct) :- EKFdom(?plot,'Pinus sylvestris',?pct).
+TreeStandMerged(?plot,'pine',?pct) :- NWRdom(?plot,'Pinus sylvestris',?pct).
+TreeStandMerged(?plot,'pine',?pct) :- LWFdom(?plot,'Pinus sylvestris',?pct).
+TreeStandMerged(?plot,'fir',?pct) :- EKFdom(?plot,'Abies alba',?pct).
+TreeStandMerged(?plot,'fir',?pct) :- NWRdom(?plot,'Abies alba',?pct).
+TreeStandMerged(?plot,'fir',?pct) :- LWFdom(?plot,'Abies alba',?pct).
+
+Location(?plot,?X,?Y) :- EKFvfl(?plot,?Z,?X,?Y).
+Location(?plot,?X,?Y) :- NWRvfl(?plot,?Z,?X,?Y).
+Location(?plot,?X,?Y) :- LWFvfl(?plot,?Z,?X,?Y).
+
+ForestManagement(?plot,?grade) :-
+EKFtrees(?plot,?BNR,?BA,?AJ,?grade,?AHC,?D1,?D2,?V7,?SOZ,?HGEM,?HBER).
+ForestManagement(?plot,?grade) :-
+LWFtrees(?plot,?BNR,?BA,?AJ,?grade,?AHC,?D1,?D2,?V7,?SOZ,?HGEM,?HBER).
+
+// Additional mapping rules (missing in specification):
+
+Source(?plot,'ekf') :- EKFdom(?plot,?sg,?pct).
+Source(?plot,'nwr') :- NWRdom(?plot,?sg,?pct).
+Source(?plot,'lwf') :- LWFdom(?plot,?sg,?pct).
+
+Altitude(?plot,?Z) :- EKFvfl(?plot,?Z,?X,?Y).
+Altitude(?plot,?Z) :- NWRvfl(?plot,?Z,?X,?Y).
+Altitude(?plot,?Z) :- LWFvfl(?plot,?Z,?X,?Y).
+
+// Facts (dummies):
+
+EKFdom(11983001,'Quercus petraea',7).
+EKFdom(11983001,'Quercus robur',8).
+EKFdom(11983002,'Quercus petraea',3).
+EKFdom(11983002,'Quercus robur',14).
+EKFdom(12193003,'Picea abies',87).
+EKFdom(12193004,'Picea abies',16).
+NWRdom(6003105,'Picea abies',14).
+LWFdom(848006,'Quercus petraea',9).
+LWFdom(848006,'Quercus robur',11).
+
+EKFtrees(11983001,2820,'oak',1925,'0',1,568,607,3.290,1,0.0,32.4).
+EKFtrees(11983002,2820,'oak',1925,'PL',1,568,607,3.290,1,0.0,32.4).
+EKFtrees(12193003,365,'spruce',1987,'B',1,796,796,4.670,0,36.7,35.9).
+EKFtrees(12193004,365,'spruce',1987,'0',1,796,796,4.670,0,36.7,35.9).
+LWFtrees(848006,2820,'oak',1925,'A',1,568,607,3.290,1,0.0,32.4).
+
+EKFvfl(11983001,400,200000,600000).
+EKFvfl(11983002,500,201000,601000).
+EKFvfl(12193003,600,202000,602000).
+EKFvfl(12193004,420,200200,600200).
+NWRvfl(6003105,900,210000,610000).
+LWFvfl(848006,700,220000,620000).
+
+// Query rules:
+
+?- SGAbundance(?plot,'oak',?pct).
+?- SGAbundance(?plot,'spruce',?pct).
+
+?- PlotsStatic(?plot,?src,?x,?y,?alt,'pure').
+?- PlotsStatic(?plot,?src,?x,?y,?alt,'mixed').
