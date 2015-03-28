@@ -1,0 +1,267 @@
+fof(act3_formula2,conjecture,(
+    ? [X] : alsatianwine(X) )).
+
+fof(act3_formula3,conjecture,(
+    ? [X] : americanwine(X) )).
+
+fof(act3_formula4,conjecture,(
+    ? [X] : bordeaux(X) )).
+
+fof(act3_formula5,conjecture,(
+    ? [X] : burgundy(X) )).
+
+fof(act3_formula6,conjecture,(
+    ? [X] : anjou(X) )).
+
+fof(act3_formula7,conjecture,(
+    ? [X] : beaujolais(X) )).
+
+fof(act3_formula8,conjecture,(
+    ? [X] : cabernetfranc(X) )).
+
+fof(act3_formula9,conjecture,(
+    ? [X] : cabernetsauvignon(X) )).
+
+fof(act3_formula10,conjecture,(
+    ? [X] : californiawine(X) )).
+
+fof(act3_formula11,conjecture,(
+    ? [X] : chardonnay(X) )).
+
+fof(act3_formula12,conjecture,(
+    ? [X] : cheninblanc(X) )).
+
+fof(act3_formula13,conjecture,(
+    ? [X] : chianti(X) )).
+
+fof(act3_formula14,conjecture,(
+    ? [X] : cotesdor(X) )).
+
+fof(act3_formula15,conjecture,(
+    ? [X] : dessertwine(X) )).
+
+fof(act3_formula16,conjecture,(
+    ? [X] : dryriesling(X) )).
+
+fof(act3_formula17,conjecture,(
+    ? [X] : dryredwine(X) )).
+
+fof(act3_formula18,conjecture,(
+    ? [X] : drywhitewine(X) )).
+
+fof(act3_formula19,conjecture,(
+    ? [X] : drywine(X) )).
+
+fof(act3_formula20,conjecture,(
+    ? [X] : earlyharvest(X) )).
+
+fof(act3_formula21,conjecture,(
+    ? [X] : frenchwine(X) )).
+
+fof(act3_formula22,conjecture,(
+    ? [X] : fullbodiedwine(X) )).
+
+fof(act3_formula23,conjecture,(
+    ? [X] : gamay(X) )).
+
+fof(act3_formula24,conjecture,(
+    ? [X] : germanwine(X) )).
+
+fof(act3_formula25,conjecture,(
+    ? [X] : grape(X) )).
+
+fof(act3_formula26,conjecture,(
+    ? [X] : icewine(X) )).
+
+fof(act3_formula27,conjecture,(
+    ? [X] : italianwine(X) )).
+
+fof(act3_formula28,conjecture,(
+    ? [X] : lateharvest(X) )).
+
+fof(act3_formula29,conjecture,(
+    ? [X] : loire(X) )).
+
+fof(act3_formula30,conjecture,(
+    ? [X] : margaux(X) )).
+
+fof(act3_formula31,conjecture,(
+    ? [X] : medoc(X) )).
+
+fof(act3_formula32,conjecture,(
+    ? [X] : meritage(X) )).
+
+fof(act3_formula33,conjecture,(
+    ? [X] : merlot(X) )).
+
+fof(act3_formula34,conjecture,(
+    ? [X] : meursault(X) )).
+
+fof(act3_formula35,conjecture,(
+    ? [X] : muscadet(X) )).
+
+fof(act3_formula36,conjecture,(
+    ? [X] : pauillac(X) )).
+
+fof(act3_formula37,conjecture,(
+    ? [X] : petitesyrah(X) )).
+
+fof(act3_formula38,conjecture,(
+    ? [X] : pinotblanc(X) )).
+
+fof(act3_formula39,conjecture,(
+    ? [X] : pinotnoir(X) )).
+
+fof(act3_formula40,conjecture,(
+    ? [X] : port(X) )).
+
+fof(act3_formula41,conjecture,(
+    ? [X] : potableliquid(X) )).
+
+fof(act3_formula42,conjecture,(
+    ? [X] : redbordeaux(X) )).
+
+fof(act3_formula43,conjecture,(
+    ? [X] : redburgundy(X) )).
+
+fof(act3_formula44,conjecture,(
+    ? [X] : redtablewine(X) )).
+
+fof(act3_formula45,conjecture,(
+    ? [X] : redwine(X) )).
+
+fof(act3_formula46,conjecture,(
+    ? [X] : region(X) )).
+
+fof(act3_formula47,conjecture,(
+    ? [X] : riesling(X) )).
+
+fof(act3_formula48,conjecture,(
+    ? [X] : rosewine(X) )).
+
+fof(act3_formula49,conjecture,(
+    ? [X] : sancerre(X) )).
+
+fof(act3_formula50,conjecture,(
+    ? [X] : sauternes(X) )).
+
+fof(act3_formula51,conjecture,(
+    ? [X] : sauvignonblanc(X) )).
+
+fof(act3_formula52,conjecture,(
+    ? [X] : semillon(X) )).
+
+fof(act3_formula53,conjecture,(
+    ? [X] : semillonorsauvignonblanc(X) )).
+
+fof(act3_formula54,conjecture,(
+    ? [X] : stemilion(X) )).
+
+fof(act3_formula55,conjecture,(
+    ? [X] : sweetriesling(X) )).
+
+fof(act3_formula56,conjecture,(
+    ? [X] : sweetwine(X) )).
+
+fof(act3_formula57,conjecture,(
+    ? [X] : tablewine(X) )).
+
+fof(act3_formula58,conjecture,(
+    ? [X] : texaswine(X) )).
+
+fof(act3_formula59,conjecture,(
+    ? [X] : tours(X) )).
+
+fof(act3_formula60,conjecture,(
+    ? [X] : vintage(X) )).
+
+fof(act3_formula61,conjecture,(
+    ? [X] : vintageyear(X) )).
+
+fof(act3_formula62,conjecture,(
+    ? [X] : whitebordeaux(X) )).
+
+fof(act3_formula63,conjecture,(
+    ? [X] : whiteburgundy(X) )).
+
+fof(act3_formula64,conjecture,(
+    ? [X] : whiteloire(X) )).
+
+fof(act3_formula65,conjecture,(
+    ? [X] : whitenonsweetwine(X) )).
+
+fof(act3_formula66,conjecture,(
+    ? [X] : whitetablewine(X) )).
+
+fof(act3_formula67,conjecture,(
+    ? [X] : whitewine(X) )).
+
+fof(act3_formula68,conjecture,(
+    ? [X] : wine(X) )).
+
+fof(act3_formula69,conjecture,(
+    ? [X] : winebody(X) )).
+
+fof(act3_formula70,conjecture,(
+    ? [X] : winecolor(X) )).
+
+fof(act3_formula71,conjecture,(
+    ? [X] : winedescriptor(X) )).
+
+fof(act3_formula72,conjecture,(
+    ? [X] : wineflavor(X) )).
+
+fof(act3_formula73,conjecture,(
+    ? [X] : winegrape(X) )).
+
+fof(act3_formula74,conjecture,(
+    ? [X] : winesugar(X) )).
+
+fof(act3_formula75,conjecture,(
+    ? [X] : winery(X) )).
+
+fof(act3_formula76,conjecture,(
+    ? [X] : winetaste(X) )).
+
+fof(act3_formula77,conjecture,(
+    ? [X] : zinfandel(X) )).
+
+fof(act3_formula78,conjecture,(
+    ? [Y,X] : adjacentregion(X,Y) )).
+
+fof(act3_formula79,conjecture,(
+    ? [Y,X] : hasbody(X,Y) )).
+
+fof(act3_formula80,conjecture,(
+    ? [Y,X] : hascolor(X,Y) )).
+
+fof(act3_formula81,conjecture,(
+    ? [Y,X] : hasflavor(X,Y) )).
+
+fof(act3_formula82,conjecture,(
+    ? [Y,X] : hasmaker(X,Y) )).
+
+fof(act3_formula83,conjecture,(
+    ? [Y,X] : hassugar(X,Y) )).
+
+fof(act3_formula84,conjecture,(
+    ? [Y,X] : hasvintageyear(X,Y) )).
+
+fof(act3_formula85,conjecture,(
+    ? [Y,X] : haswinedescriptor(X,Y) )).
+
+fof(act3_formula86,conjecture,(
+    ? [Y,X] : locatedin(X,Y) )).
+
+fof(act3_formula87,conjecture,(
+    ? [Y,X] : madefromgrape(X,Y) )).
+
+fof(act3_formula88,conjecture,(
+    ? [Y,X] : madefromfruit(X,Y) )).
+
+fof(act3_formula89,conjecture,(
+    ? [Y,X] : madeintowine(X,Y) )).
+
+fof(act3_formula90,conjecture,(
+    ? [Y,X] : produceswine(X,Y) )).
+
