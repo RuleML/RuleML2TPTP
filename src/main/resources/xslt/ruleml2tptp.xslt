@@ -430,13 +430,21 @@
 
     <xsl:template match="r:Uniterm">
         <xsl:text>(</xsl:text>
-        <xsl:value-of select="*" separator=" @ "/>
+        <xsl:call-template name="join">
+            <xsl:with-param name="list" select="r:*" />
+            <xsl:with-param name="separator" select="' @ '" />
+        </xsl:call-template>
         <xsl:text>)</xsl:text>
     </xsl:template>
 
     <xsl:template match="r:Lambda">
-        <xsl:text>^[</xsl:text>
-        <xsl:text>]</xsl:text>
+        <xsl:text>^ [</xsl:text>
+        <xsl:call-template name="join">
+            <xsl:with-param name="list" select="r:declare" />
+            <xsl:with-param name="separator" select="','" />
+        </xsl:call-template>
+        <xsl:text>] : </xsl:text>
+        <xsl:apply-templates select="r:formula"/>
     </xsl:template>
 
     <xsl:template match="r:Entity">
@@ -469,6 +477,18 @@
         <xsl:text>#dia(</xsl:text>
         <xsl:apply-templates/>
         <xsl:text>)</xsl:text>
+    </xsl:template>
+
+    <xsl:template name="join">
+        <xsl:param name="list"/>
+        <xsl:param name="separator" as="xs:string"/>
+
+        <xsl:for-each select="$list">
+            <xsl:apply-templates/>
+            <xsl:if test="position() != last()">
+                <xsl:value-of select="$separator"/>
+            </xsl:if>
+        </xsl:for-each>
     </xsl:template>
 
 </xsl:stylesheet>

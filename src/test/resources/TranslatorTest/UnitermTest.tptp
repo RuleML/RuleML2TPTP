@@ -1,0 +1,6 @@
+fof(act1_formula1,axiom,(
+    (a @ b) )).
+
+fof(act1_formula2,axiom,(
+    ((a @ b) @ c @ (d @ e)) )).
+
