@@ -428,6 +428,9 @@
         </xsl:choose>
     </xsl:template>
 
+
+    <!-- Higher Order -->
+
     <xsl:template match="r:Uniterm">
         <xsl:text>(</xsl:text>
         <xsl:call-template name="join">
@@ -447,7 +450,7 @@
         <xsl:apply-templates select="r:formula"/>
     </xsl:template>
 
-    <xsl:template match="r:Entity">
+    <xsl:template match="r:Entitype">
         <xsl:apply-templates select="r:entity"/>
         <xsl:text>:</xsl:text>
         <xsl:apply-templates select="r:type"/>
@@ -458,6 +461,9 @@
         <xsl:text>&gt;</xsl:text>
         <xsl:apply-templates select="r:codamin"/>
     </xsl:template>
+
+
+    <!-- Modal -->
 
     <xsl:template match="r:Modal">
         <xsl:text>(</xsl:text>
@@ -478,6 +484,9 @@
         <xsl:apply-templates/>
         <xsl:text>)</xsl:text>
     </xsl:template>
+
+
+    <!-- Utilities -->
 
     <xsl:template name="join">
         <xsl:param name="list"/>
