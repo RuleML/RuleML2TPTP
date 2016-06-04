@@ -6,12 +6,12 @@
                 xmlns:r="http://ruleml.org/spec">
     <!-- The input of this translator must be a normalized RuleML instance. -->
 
+    <xsl:param name="formula-type" select="'fof'" as="xs:string" required="no"/>
     <!-- line break -->
     <xsl:param name="nl" select="'&#xA;'" as="xs:string" required="no"/>
 
     <xsl:output method="text" encoding="UTF-8"/>
     <xsl:strip-space elements="*"/>
-
 
     <xsl:template match="comment()" mode="#all">
         <xsl:if test="not(matches(., '^\s*$'))">
@@ -99,7 +99,8 @@
 
         <xsl:apply-templates select="comment()"/>
 
-        <xsl:text>fof(</xsl:text>
+        <xsl:value-of select="$formula-type"/>
+        <xsl:text>(</xsl:text>
         <!-- formula name -->
         <xsl:value-of select="concat('act', $act-index, '_formula', count(preceding-sibling::r:formula) + 1)"/>
 
