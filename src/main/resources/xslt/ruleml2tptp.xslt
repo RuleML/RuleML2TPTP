@@ -470,9 +470,9 @@
     <xsl:template match="r:Modal">
         <xsl:text>(</xsl:text>
         <xsl:apply-templates select="r:variety"/>
-        <xsl:text>:</xsl:text>
+        <xsl:text>: (</xsl:text>
         <xsl:apply-templates select="r:proposition"/>
-        <xsl:text>)</xsl:text>
+        <xsl:text>))</xsl:text>
     </xsl:template>
 
     <xsl:template match="r:Box">
