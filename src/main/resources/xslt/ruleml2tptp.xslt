@@ -441,13 +441,14 @@
     </xsl:template>
 
     <xsl:template match="r:Lambda">
-        <xsl:text>^ [</xsl:text>
+        <xsl:text>(^[</xsl:text>
         <xsl:call-template name="join">
             <xsl:with-param name="list" select="r:declare" />
             <xsl:with-param name="separator" select="','" />
         </xsl:call-template>
-        <xsl:text>] : </xsl:text>
+        <xsl:text>]: </xsl:text>
         <xsl:apply-templates select="r:formula"/>
+        <xsl:text>)</xsl:text>
     </xsl:template>
 
     <xsl:template match="r:Entitype">
@@ -459,7 +460,7 @@
     <xsl:template match="r:Arrow">
         <xsl:apply-templates select="r:domain"/>
         <xsl:text>&gt;</xsl:text>
-        <xsl:apply-templates select="r:codamin"/>
+        <xsl:apply-templates select="r:codomain"/>
     </xsl:template>
 
 
