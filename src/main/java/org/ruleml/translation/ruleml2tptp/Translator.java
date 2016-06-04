@@ -1,15 +1,13 @@
 package org.ruleml.translation.ruleml2tptp;
 
-import java.nio.charset.StandardCharsets;
-import java.io.InputStreamReader;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.SAXResult;
+import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamSource;
 
@@ -20,7 +18,6 @@ public class Translator {
 
     private static final String XSLT_NORMALIZER_RES_PATH = "/xslt/101_naffologeq_normalizer.xslt";
     private static final String XSLT_TRANSLATOR_RES_PATH = "/xslt/ruleml2tptp.xslt";
-    private static final String NEWLINE = String.format("%n");
 
     private SAXTransformerFactory transFactory;
     private Templates normalizerTemplates;
@@ -37,11 +34,11 @@ public class Translator {
         try {
             if (normalizerTemplates == null) {
                 normalizerTemplates = transFactory.newTemplates(new StreamSource(
-                            getClass().getResourceAsStream(XSLT_NORMALIZER_RES_PATH)));
+                    getClass().getResourceAsStream(XSLT_NORMALIZER_RES_PATH)));
             }
             if (translatorTemplates == null) {
                 translatorTemplates = transFactory.newTemplates(new StreamSource(
-                            getClass().getResourceAsStream(XSLT_TRANSLATOR_RES_PATH)));
+                    getClass().getResourceAsStream(XSLT_TRANSLATOR_RES_PATH)));
             }
         } catch (TransformerConfigurationException ex) {
             throw new IllegalStateException(ex);
@@ -56,9 +53,8 @@ public class Translator {
         Transformer transPerformer;
         try {
             transPerformer = normalizerTemplates.newTransformer();
-            final TransformerHandler transHandler =
-                transFactory.newTransformerHandler(translatorTemplates);
-            transHandler.getTransformer().setParameter("nl", NEWLINE);
+            final TransformerHandler transHandler
+                = transFactory.newTransformerHandler(translatorTemplates);
             transHandler.setResult(result);
             result = new SAXResult(transHandler);
         } catch (TransformerConfigurationException ex) {
@@ -66,5 +62,4 @@ public class Translator {
         }
         transPerformer.transform(src, result);
     }
-
 }
