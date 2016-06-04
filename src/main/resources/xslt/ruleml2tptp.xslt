@@ -6,7 +6,7 @@
                 xmlns:r="http://ruleml.org/spec">
     <!-- The input of this translator must be a normalized RuleML instance. -->
 
-    <xsl:param name="formula-type" select="'fof'" as="xs:string" required="no"/>
+    <xsl:param name="tptp-lang" select="'fof'" as="xs:string" required="no"/>
     <!-- line break -->
     <xsl:param name="nl" select="'&#xA;'" as="xs:string" required="no"/>
 
@@ -99,7 +99,7 @@
 
         <xsl:apply-templates select="comment()"/>
 
-        <xsl:value-of select="$formula-type"/>
+        <xsl:value-of select="$tptp-lang"/>
         <xsl:text>(</xsl:text>
         <!-- formula name -->
         <xsl:value-of select="concat('act', $act-index, '_formula', count(preceding-sibling::r:formula) + 1)"/>
@@ -388,7 +388,7 @@
     </xsl:template>
 
     <!-- constants and functors in the TPTP language start with a lowercase letter or is single-quoted -->
-    <xsl:template match="r:Rel | r:Ind | r:Fun"> <!-- Fun is in Hornlog. -->
+    <xsl:template match="r:Rel | r:Ind | r:Fun | r:Const"> <!-- Fun is in Hornlog. -->
         <xsl:choose>
             <xsl:when test="string(@iri)">
                 <xsl:call-template name="normalize-text">
@@ -409,7 +409,7 @@
             <xsl:if test="preceding-sibling::r:declare">
                 <xsl:text>,</xsl:text>
             </xsl:if>
-            <xsl:apply-templates select="r:Var"/>
+            <xsl:apply-templates select="r:*"/>
         </xsl:for-each>
     </xsl:template>
 
