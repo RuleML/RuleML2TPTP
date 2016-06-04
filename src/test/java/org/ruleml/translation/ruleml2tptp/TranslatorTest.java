@@ -1,60 +1,60 @@
 package org.ruleml.translation.ruleml2tptp;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.PathMatcher;
+import java.nio.file.Paths;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import static org.apache.commons.io.FileUtils.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
 /**
  * @author edmonluan@gmail.com (Meng Luan)
  */
-@RunWith(Parameterized.class)
 public class TranslatorTest {
 
-    private static Translator translator;
+    private static final String RULEML_FILE_NAME_SUFFIX = ".ruleml";
+    private static final String TPTP_FILE_NAME_SUFFIX = ".tptp";
+    private static final Translator TRANSLATOR
+        = new Translator((SAXTransformerFactory) (SAXTransformerFactory.newInstance()));
+    private static final PathMatcher RULEML_FILE_MATCHER
+        = FileSystems.getDefault().getPathMatcher("glob:*" + RULEML_FILE_NAME_SUFFIX);
 
     @BeforeClass
     public static void setUpClass() {
-        translator = new Translator((SAXTransformerFactory) (SAXTransformerFactory.newInstance()));
-        translator.loadTemplates();
-    }
-
-    @Parameters(name = "{index}: {0}")
-    public static String[] baseNames() {
-        return new String[]{
-            "Atom", "Implies", "Forall", "Exists", "Equal", "And", "Or", "Expr",
-            "RelFunIndVar", "comments", "Equivalent", "Neg", "iri"
-        };
-    }
-
-    private final String baseName;
-
-    public TranslatorTest(final String baseName) {
-        this.baseName = baseName;
+        TRANSLATOR.loadTemplates();
     }
 
     @Test
-    public void test() throws IOException, TransformerException, URISyntaxException {
-        final File input = new File(getClass().getResource("/TranslatorTest/" + baseName + "Test.ruleml").toURI());
-        final File result = File.createTempFile("TranslatorTest_" + baseName + "Test_", ".tptp.tmp");
-        translator.translate(new StreamSource(input), new StreamResult(result));
-        final String expected = readFileToString(
-            new File(getClass().getResource("/TranslatorTest/" + baseName + "Test.tptp").toURI()),
-            StandardCharsets.UTF_8);
-        final String resultFilePath = result.getCanonicalPath();
-        final String resultContent = readFileToString(result, StandardCharsets.UTF_8);
-        assertEquals("Result file: " + resultFilePath, expected, resultContent);
-        assertTrue("Failed to delete " + resultFilePath, result.delete());
+    public void testFiles() throws IOException, URISyntaxException {
+        Files.walk(Paths.get(getClass().getResource("/test/translator").toURI()), FileVisitOption.FOLLOW_LINKS)
+            .filter(p -> RULEML_FILE_MATCHER.matches(p)).forEach(p -> testInputFile(p));
+    }
+
+    private static void testInputFile(final Path path) {
+        final String fileName = path.getFileName().toString();
+        final String baseName = fileName.substring(0, fileName.length() - RULEML_FILE_NAME_SUFFIX.length());
+        String expected, translated;
+        try {
+            expected = new String(
+                Files.readAllBytes(path.resolveSibling(baseName + TPTP_FILE_NAME_SUFFIX)),
+                StandardCharsets.UTF_8);
+            final StringWriter writer = new StringWriter();
+            TRANSLATOR.translate(new StreamSource(path.toFile()), new StreamResult(writer));
+            translated = writer.toString();
+        } catch (final IOException | TransformerException ex) {
+            throw new RuntimeException(ex);
+        }
+        assertEquals(baseName + "failed", expected, translated);
     }
 }
