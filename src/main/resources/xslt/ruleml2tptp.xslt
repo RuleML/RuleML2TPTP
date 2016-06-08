@@ -58,7 +58,7 @@
     </xsl:template>
 
     <xsl:template match="r:*">
-        <xsl:apply-templates/>
+        <xsl:apply-templates select="r:*"/>
     </xsl:template>
 
     <xsl:template match="/">
@@ -117,7 +117,7 @@
         <xsl:text>,</xsl:text>
 
         <xsl:variable name="content-sequence" as="xs:string*">
-            <xsl:apply-templates select="r:*">
+            <xsl:apply-templates>
                 <xsl:with-param name="depth" select="$depth" tunnel="yes"/>
                 <!-- this param indicates if the children can break the line at the very
                 beginning -->
@@ -343,7 +343,7 @@
                         <xsl:value-of select="$connective"/>
                         <xsl:text> </xsl:text>
                     </xsl:if>
-                    <xsl:apply-templates select="r:*">
+                    <xsl:apply-templates>
                         <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
                         <xsl:with-param name="line-breaking" select="false()" tunnel="yes"/>
                     </xsl:apply-templates>
@@ -351,7 +351,7 @@
                 <xsl:text> )</xsl:text>
             </xsl:when>
             <xsl:when test="r:formula">
-                <xsl:apply-templates select="r:*">
+                <xsl:apply-templates>
                     <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
                     <xsl:with-param name="line-breaking" select="false()" tunnel="yes"/>
                 </xsl:apply-templates>
@@ -418,7 +418,7 @@
 
         <xsl:variable name="normalized-text" select="normalize-space($text)" as="xs:string"/>
         <xsl:choose>
-            <xsl:when test="matches($normalized-text, '^[a-z][a-z0-9_]*$', 'i')">
+            <xsl:when test="matches($normalized-text, '^[a-z][a-z0-9_$]*$', 'i')">
                 <xsl:value-of select="concat(lower-case(substring($normalized-text, 1, 1)), substring($normalized-text, 2))"/>
             </xsl:when>
             <xsl:otherwise>
