@@ -435,19 +435,20 @@
     <xsl:template match="r:Uniterm">
         <xsl:text>(</xsl:text>
         <xsl:call-template name="join">
-            <xsl:with-param name="list" select="r:*" />
+            <xsl:with-param name="list" select="r:*"/>
             <xsl:with-param name="separator" select="' @ '" />
         </xsl:call-template>
         <xsl:text>)</xsl:text>
     </xsl:template>
 
     <xsl:template match="r:Lambda">
-        <xsl:text>(^[</xsl:text>
+        <xsl:text>(</xsl:text>
+        <xsl:text>^ [</xsl:text>
         <xsl:call-template name="join">
             <xsl:with-param name="list" select="r:declare" />
             <xsl:with-param name="separator" select="','" />
         </xsl:call-template>
-        <xsl:text>]: </xsl:text>
+        <xsl:text>] : </xsl:text>
         <xsl:apply-templates select="r:formula"/>
         <xsl:text>)</xsl:text>
     </xsl:template>
@@ -459,9 +460,11 @@
     </xsl:template>
 
     <xsl:template match="r:Arrow">
+        <xsl:text>(</xsl:text>
         <xsl:apply-templates select="r:domain"/>
         <xsl:text>&gt;</xsl:text>
         <xsl:apply-templates select="r:codomain"/>
+        <xsl:text>)</xsl:text>
     </xsl:template>
 
 
@@ -470,19 +473,23 @@
     <xsl:template match="r:Modal">
         <xsl:text>(</xsl:text>
         <xsl:apply-templates select="r:variety"/>
-        <xsl:text>: (</xsl:text>
+        <xsl:text>:</xsl:text>
+        <xsl:text>(</xsl:text> <!-- This pair of parens is required by THF but not FOL. Put them here as a interim solution. -->
         <xsl:apply-templates select="r:proposition"/>
-        <xsl:text>))</xsl:text>
+        <xsl:text>)</xsl:text>
+        <xsl:text>)</xsl:text>
     </xsl:template>
 
     <xsl:template match="r:Box">
-        <xsl:text>#box(</xsl:text>
+        <xsl:text>#box</xsl:text>
+        <xsl:text>(</xsl:text>
         <xsl:apply-templates/>
         <xsl:text>)</xsl:text>
     </xsl:template>
 
     <xsl:template match="r:Dia">
-        <xsl:text>#dia(</xsl:text>
+        <xsl:text>#dia</xsl:text>
+        <xsl:text>(</xsl:text>
         <xsl:apply-templates/>
         <xsl:text>)</xsl:text>
     </xsl:template>
