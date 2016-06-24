@@ -12,6 +12,7 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.annotation.Arg;
+import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 
@@ -85,7 +86,8 @@ public class Main {
 
     private static Options parseArgs(final String[] args) {
         final ArgumentParser parser = ArgumentParsers.newArgumentParser("ruleml2tptp")
-            .description("Translate RuleML into TPTP.");
+            .description("Translate RuleML into TPTP.").version("RuleML2TPTP 2.0.1-SNAPSHOT");
+        parser.addArgument("--version").action(Arguments.version()).help("print version");
         parser.addArgument("input").metavar("<input>").nargs("?").setDefault("-").help("input file path or \"-\" for standard input");
         parser.addArgument("output").metavar("<output>").nargs("?").setDefault("-").help("output file path or \"-\" for standard output");
         Options opts = new Options();
