@@ -16,8 +16,8 @@ import javax.xml.transform.stream.StreamSource;
  */
 public class Translator {
 
-    private static final String XSLT_NORMALIZER_RES_PATH = "/xslt/101_naffologeq_normalizer.xslt";
-    private static final String XSLT_TRANSLATOR_RES_PATH = "/xslt/ruleml2tptp.xslt";
+    private static final String XSLT_NORMALIZER_RES_PATH = "xslt/101_naffologeq_normalizer.xslt";
+    private static final String XSLT_TRANSLATOR_RES_PATH = "xslt/ruleml2tptp.xslt";
 
     private SAXTransformerFactory transFactory;
     private Templates normalizerTemplates;

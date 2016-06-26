@@ -4,7 +4,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.util.Properties;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.sax.SAXTransformerFactory;
@@ -49,8 +53,12 @@ public class Main {
     private static final int EC_TRANSFORM = 2;
 
     private static SAXTransformerFactory transFactory;
+    private static final Properties properties = new Properties();
 
-    public static void main(final String args[]) {
+    public static void main(final String args[]) throws IOException {
+        try (final Reader reader = new InputStreamReader(Main.class.getResourceAsStream("application.properties"), StandardCharsets.UTF_8)) {
+            properties.load(reader);
+        }
         final Options opts = parseArgs(args);
 
         try {
@@ -86,7 +94,8 @@ public class Main {
 
     private static Options parseArgs(final String[] args) {
         final ArgumentParser parser = ArgumentParsers.newArgumentParser("ruleml2tptp")
-            .description("Translate RuleML into TPTP.").version("RuleML2TPTP 2.0.1-SNAPSHOT");
+            .description("Translate RuleML into TPTP.")
+            .version(properties.getProperty("application.name") + " " + properties.getProperty("application.version"));
         parser.addArgument("--version").action(Arguments.version()).help("print version");
         parser.addArgument("input").metavar("<input>").nargs("?").setDefault("-").help("input file path or \"-\" for standard input");
         parser.addArgument("output").metavar("<output>").nargs("?").setDefault("-").help("output file path or \"-\" for standard output");
