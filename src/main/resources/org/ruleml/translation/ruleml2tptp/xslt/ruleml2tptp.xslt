@@ -459,12 +459,17 @@
         <xsl:apply-templates select="r:type"/>
     </xsl:template>
 
-    <xsl:template match="r:Arrow">
+    <xsl:template match="r:Tmap">
         <xsl:text>(</xsl:text>
         <xsl:apply-templates select="r:domain"/>
         <xsl:text>&gt;</xsl:text>
         <xsl:apply-templates select="r:codomain"/>
         <xsl:text>)</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="r:Tbase">
+        <xsl:text>$</xsl:text>
+        <xsl:value-of select="text()"/>
     </xsl:template>
 
 
