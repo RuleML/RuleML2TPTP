@@ -417,7 +417,7 @@
 
         <xsl:variable name="normalized-text" select="normalize-space($text)" as="xs:string"/>
         <xsl:choose>
-            <xsl:when test="matches($normalized-text, '^[a-z$]$?[a-z0-9_]*$', 'i')">
+            <xsl:when test="matches($normalized-text, '^[a-z][a-z0-9_]*$', 'i')">
                 <xsl:value-of select="concat(lower-case(substring($normalized-text, 1, 1)), substring($normalized-text, 2))"/>
             </xsl:when>
             <xsl:otherwise>
