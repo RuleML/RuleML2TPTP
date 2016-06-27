@@ -80,19 +80,19 @@
 
     <xsl:template match="r:Assert">
         <xsl:apply-templates select="comment()"/>
-        <xsl:apply-templates select="r:formula" mode="fof-formula">
+        <xsl:apply-templates select="r:formula | r:termula" mode="fof-formula">
             <xsl:with-param name="formula-type" select="local-name()"/>
         </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template match="r:Query">
         <xsl:apply-templates select="comment()"/>
-        <xsl:apply-templates select="r:formula" mode="fof-formula">
+        <xsl:apply-templates select="r:formula | r:termula" mode="fof-formula">
             <xsl:with-param name="formula-type" select="local-name()"/>
         </xsl:apply-templates>
     </xsl:template>
 
-    <xsl:template match="r:formula" mode="fof-formula">
+    <xsl:template match="r:formula | r:termula" mode="fof-formula">
         <xsl:param name="act-index" required="yes" tunnel="yes" as="xs:integer"/>
         <xsl:param name="formula-type" required="yes" as="xs:string"/>
         <xsl:variable name="depth" select="1" as="xs:integer"/>
@@ -102,7 +102,7 @@
         <xsl:value-of select="$tptp-lang"/>
         <xsl:text>(</xsl:text>
         <!-- formula name -->
-        <xsl:value-of select="concat('act', $act-index, '_formula', count(preceding-sibling::r:formula) + 1)"/>
+        <xsl:value-of select="concat('act', $act-index, '_formula', count(preceding-sibling::r:formula) + count(preceding-sibling::r:termula) + 1)"/>
 
         <xsl:text>,</xsl:text>
         <!-- formula role -->
@@ -186,7 +186,7 @@
         <xsl:text>] :</xsl:text>
 
         <xsl:variable name="content-sequence" as="xs:string*">
-            <xsl:apply-templates select="r:formula">
+            <xsl:apply-templates select="r:formula | r:termula">
                 <xsl:with-param name="depth" select="$final-depth + 1" tunnel="yes"/>
                 <xsl:with-param name="line-breaking" select="true()" tunnel="yes"/>
                 <xsl:with-param name="last-quantifier-depth" select="$final-depth" tunnel="yes"/>
@@ -326,17 +326,18 @@
         <xsl:param name="line-breaking" required="yes" as="xs:boolean" tunnel="yes"/>
         <xsl:param name="connective" required="yes" as="xs:string"/>
         <xsl:param name="empty-form" required="yes" as="xs:string"/>
+        <xsl:variable name="termulas" select="r:formula | r:termula"/>
 
         <xsl:choose>
-            <xsl:when test="r:formula[2]">
+            <xsl:when test="count($termulas) > 1">
                 <xsl:if test="$line-breaking">
                     <xsl:call-template name="break-line">
                         <xsl:with-param name="depth" select="$depth"/>
                     </xsl:call-template>
                 </xsl:if>
                 <xsl:text>( </xsl:text>
-                <xsl:for-each select="r:formula">
-                    <xsl:if test="preceding-sibling::r:formula">
+                <xsl:for-each select="$termulas">
+                    <xsl:if test="preceding-sibling::r:formula | preceding-sibling::r:termula">
                         <xsl:call-template name="break-line">
                             <xsl:with-param name="depth" select="$depth"/>
                         </xsl:call-template>
@@ -350,7 +351,7 @@
                 </xsl:for-each>
                 <xsl:text> )</xsl:text>
             </xsl:when>
-            <xsl:when test="r:formula">
+            <xsl:when test="r:formula | r:termula">
                 <xsl:apply-templates>
                     <xsl:with-param name="depth" select="$depth + 1" tunnel="yes"/>
                     <xsl:with-param name="line-breaking" select="false()" tunnel="yes"/>
@@ -449,7 +450,7 @@
             <xsl:with-param name="separator" select="','" />
         </xsl:call-template>
         <xsl:text>] : </xsl:text>
-        <xsl:apply-templates select="r:formula"/>
+        <xsl:apply-templates select="r:termula"/>
         <xsl:text>)</xsl:text>
     </xsl:template>
 
