@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
 <RuleML xmlns="http://ruleml.org/spec">
   <Assert>
     <Equal>
@@ -13,8 +14,8 @@
               </entity>
               <type>
                 <Tmap>
-  				        <domain><Tbase>i</Tbase></domain>
-  				        <codomain><Tbase>o</Tbase></codomain>
+                  <domain><Tbase>i</Tbase></domain>
+                  <codomain><Tbase>o</Tbase></codomain>
                 </Tmap>
               </type>
             </Entitype>
