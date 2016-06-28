@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <RuleML xmlns="http://ruleml.org/spec">
-    <Assert>
+  <Assert>
+    <Uniterm>
+      <op>
+        <Const>a</Const>
+      </op>
+      <arg>
+        <Const>b</Const>
+      </arg>
+    </Uniterm>
+    <Uniterm>
+      <op>
         <Uniterm>
-            <op>
-                <Const>a</Const>
-            </op>
-            <arg>
-                <Const>b</Const>
-            </arg>
+          <op>
+            <Const>a</Const>
+          </op>
+          <arg>
+            <Const>b</Const>
+          </arg>
         </Uniterm>
+      </op>
+      <arg>
+        <Const>c</Const>
+      </arg>
+      <arg>
         <Uniterm>
-            <op>
-                <Uniterm>
-                    <op>
-                        <Const>a</Const>
-                    </op>
-                    <arg>
-                        <Const>b</Const>
-                    </arg>
-                </Uniterm>
-            </op>
-            <arg>
-                <Const>c</Const>
-            </arg>
-            <arg>
-                <Uniterm>
-                    <op>
-                        <Const>d</Const>
-                    </op>
-                    <arg>
-                        <Const>e</Const>
-                    </arg>
-                </Uniterm>
-            </arg>
+          <op>
+            <Const>d</Const>
+          </op>
+          <arg>
+            <Const>e</Const>
+          </arg>
         </Uniterm>
-    </Assert>
+      </arg>
+    </Uniterm>
+  </Assert>
 </RuleML>
 
