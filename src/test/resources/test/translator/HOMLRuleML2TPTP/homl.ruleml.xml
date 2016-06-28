@@ -6,25 +6,15 @@
       <if>
         <Modal>
           <variety>
-            <Box>
-              <arg>
-                <Const>a</Const>
-              </arg>
-            </Box>
+            <Box><arg><Const>a</Const></arg></Box>
           </variety>
           <proposition>
             <Forall>
-              <declare>
-                <Var>X</Var>
-              </declare>
+              <declare><Var>X</Var></declare>
               <formula>
                 <Atom>
-                  <op>
-                    <Rel>p</Rel>
-                  </op>
-                  <arg>
-                    <Var>X</Var>
-                  </arg>
+                  <op><Rel>p</Rel></op>
+                  <arg><Var>X</Var></arg>
                 </Atom>
               </formula>
             </Forall>
@@ -34,25 +24,15 @@
       <then>
         <Modal>
           <variety>
-            <Dia>
-              <arg>
-                <Const>b</Const>
-              </arg>
-            </Dia>
+            <Dia><arg><Const>b</Const></arg></Dia>
           </variety>
           <proposition>
             <Exists>
-              <declare>
-                <Var>X</Var>
-              </declare>
+              <declare><Var>X</Var></declare>
               <formula>
                 <Atom>
-                  <op>
-                    <Rel>p</Rel>
-                  </op>
-                  <arg>
-                    <Var>X</Var>
-                  </arg>
+                  <op><Rel>p</Rel></op>
+                  <arg><Var>X</Var></arg>
                 </Atom>
               </formula>
             </Exists>

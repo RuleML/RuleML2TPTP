@@ -10,12 +10,8 @@
           </entity>
           <type>
             <Tmap>
-              <domain>
-                <Tbase>i</Tbase>
-              </domain>
-              <codomain>
-                <Tbase>o</Tbase>
-              </codomain>
+              <domain><Tbase>i</Tbase></domain>
+              <codomain><Tbase>o</Tbase></codomain>
             </Tmap>
           </type>
         </Entitype>
@@ -27,12 +23,8 @@
           </entity>
           <type>
             <Tmap>
-              <domain>
-                <Tbase>i</Tbase>
-              </domain>
-              <codomain>
-                <Tbase>o</Tbase>
-              </codomain>
+              <domain><Tbase>i</Tbase></domain>
+              <codomain><Tbase>o</Tbase></codomain>
             </Tmap>
           </type>
         </Entitype>
@@ -44,12 +36,8 @@
           </entity>
           <type>
             <Tmap>
-              <domain>
-                <Tbase>i</Tbase>
-              </domain>
-              <codomain>
-                <Tbase>o</Tbase>
-              </codomain>
+              <domain><Tbase>i</Tbase></domain>
+              <codomain><Tbase>o</Tbase></codomain>
             </Tmap>
           </type>
         </Entitype>
@@ -58,56 +46,32 @@
         <Equal>
           <left>
             <Uniterm>
-              <op>
-                <Const>union</Const>
-              </op>
-              <arg>
-                <Var>A</Var>
-              </arg>
+              <op><Const>union</Const></op>
+              <arg><Var>A</Var></arg>
               <arg>
                 <Uniterm>
-                  <op>
-                    <Const>intersection</Const>
-                  </op>
-                  <arg>
-                    <Var>B</Var>
-                  </arg>
-                  <arg>
-                    <Var>C</Var>
-                  </arg>
+                  <op><Const>intersection</Const></op>
+                  <arg><Var>B</Var></arg>
+                  <arg><Var>C</Var></arg>
                 </Uniterm>
               </arg>
             </Uniterm>
           </left>
           <right>
             <Uniterm>
-              <op>
-                <Const>intersection</Const>
-              </op>
+              <op><Const>intersection</Const></op>
               <arg>
                 <Uniterm>
-                  <op>
-                    <Const>union</Const>
-                  </op>
-                  <arg>
-                    <Var>A</Var>
-                  </arg>
-                  <arg>
-                    <Var>B</Var>
-                  </arg>
+                  <op><Const>union</Const></op>
+                  <arg><Var>A</Var></arg>
+                  <arg><Var>B</Var></arg>
                 </Uniterm>
               </arg>
               <arg>
                 <Uniterm>
-                  <op>
-                    <Const>union</Const>
-                  </op>
-                  <arg>
-                    <Var>A</Var>
-                  </arg>
-                  <arg>
-                    <Var>C</Var>
-                  </arg>
+                  <op><Const>union</Const></op>
+                  <arg><Var>A</Var></arg>
+                  <arg><Var>C</Var></arg>
                 </Uniterm>
               </arg>
             </Uniterm>
