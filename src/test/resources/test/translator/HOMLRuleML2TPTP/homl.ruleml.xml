@@ -15,18 +15,25 @@
           <proposition>
             <Forall>
               <declare>
-                <Var>X</Var>
+                <Entitype>
+                  <entity>
+                    <Var>X</Var>
+                  </entity>
+                  <type>
+                    <Tbase>i</Tbase>
+                  </type>
+                </Entitype>
               </declare>
-              <formula>
-                <Atom>
+              <termula>
+                <Uniterm>
                   <op>
                     <Rel>p</Rel>
                   </op>
                   <arg>
                     <Var>X</Var>
                   </arg>
-                </Atom>
-              </formula>
+                </Uniterm>
+              </termula>
             </Forall>
           </proposition>
         </Modal>
@@ -43,18 +50,25 @@
           <proposition>
             <Exists>
               <declare>
-                <Var>X</Var>
+                <Entitype>
+                  <entity>
+                    <Var>X</Var>
+                  </entity>
+                  <type>
+                    <Tbase>i</Tbase>
+                  </type>
+                </Entitype>
               </declare>
-              <formula>
-                <Atom>
+              <termula>
+                <Uniterm>
                   <op>
                     <Rel>p</Rel>
                   </op>
                   <arg>
                     <Var>X</Var>
                   </arg>
-                </Atom>
-              </formula>
+                </Uniterm>
+              </termula>
             </Exists>
           </proposition>
         </Modal>
