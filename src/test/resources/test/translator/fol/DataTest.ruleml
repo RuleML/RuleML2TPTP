@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<RuleML xmlns="http://ruleml.org/spec">
+  <Assert>
+    <Atom>
+      <Rel>object</Rel>
+      <Var>_G1609</Var>
+      <Ind>dog</Ind>
+      <Ind>countable</Ind>
+      <Ind>na</Ind>
+      <Ind>eq</Ind>
+      <Data>1</Data>
+    </Atom>
+  </Assert>
+</RuleML>
+

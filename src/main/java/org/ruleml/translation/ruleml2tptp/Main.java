@@ -78,21 +78,21 @@ public class Main {
   private static class XSLTVersionAction implements ArgumentAction {
 
     @Override
-    public void run(ArgumentParser parser, Argument arg, Map<String, Object> attrs, String flag, Object value)
-        throws ArgumentParserException {
+    public void run(final ArgumentParser parser, final Argument arg, final Map<String, Object> attrs, final String flag,
+        final Object value) throws ArgumentParserException {
       try {
         final StringWriter writer = new StringWriter();
         transFactory.newTransformer(new StreamSource(new StringReader(XSLT_PROPERTIES)))
             .transform(new StreamSource(new StringReader(DUMMY_XML)), new StreamResult(writer));
         System.out.println(writer.toString());
-      } catch (TransformerException ex) {
+      } catch (final TransformerException ex) {
         throw new IllegalStateException(ex);
       }
       System.exit(0);
     }
 
     @Override
-    public void onAttach(Argument arg) {
+    public void onAttach(final Argument arg) {
     }
 
     @Override
@@ -104,10 +104,11 @@ public class Main {
   private static class InputStreamType implements ArgumentType<InputStream> {
 
     @Override
-    public InputStream convert(ArgumentParser parser, Argument arg, String value) throws ArgumentParserException {
+    public InputStream convert(final ArgumentParser parser, final Argument arg, final String value)
+        throws ArgumentParserException {
       try {
         return new BufferedInputStream(new FileInputStream(value));
-      } catch (FileNotFoundException | SecurityException e) {
+      } catch (final FileNotFoundException | SecurityException e) {
         throw new ArgumentParserException("Couldn't read input file: " + value, e, parser, arg);
       }
     }
@@ -116,21 +117,22 @@ public class Main {
   private static class OutputStreamType implements ArgumentType<OutputStream> {
 
     @Override
-    public OutputStream convert(ArgumentParser parser, Argument arg, String value) throws ArgumentParserException {
+    public OutputStream convert(final ArgumentParser parser, final Argument arg, final String value)
+        throws ArgumentParserException {
       try {
         return new BufferedOutputStream(new FileOutputStream(value));
-      } catch (FileNotFoundException | SecurityException e) {
+      } catch (final FileNotFoundException | SecurityException e) {
         throw new ArgumentParserException("Couldn't write to output file: " + value, e, parser, arg);
       }
     }
   }
 
-  private static InputStream getInput(Namespace opts) {
+  private static InputStream getInput(final Namespace opts) {
     final InputStream in = opts.get("input");
     return in == null ? System.in : in;
   }
 
-  private static OutputStream getOutput(Namespace opts) {
+  private static OutputStream getOutput(final Namespace opts) {
     final OutputStream out = opts.get("output");
     return out == null ? System.out : out;
   }
