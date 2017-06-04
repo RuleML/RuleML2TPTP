@@ -98,19 +98,15 @@
     <resources>
       <resource>
         <directory>src/main/resources</directory>
-        <filtering>true</filtering>
-        <includes>
-          <include>*.properties</include>
-        </includes>
+        <filtering>false</filtering>
       </resource>
       <resource>
         <directory>src/main/resources</directory>
-        <filtering>false</filtering>
-        <excludes>
-          <exclude>*.properties</exclude>
-        </excludes>
+        <filtering>true</filtering>
+        <includes>
+          <include>**/*.properties</include>
+        </includes>
       </resource>
     </resources>
   </build>
-
 </project>
