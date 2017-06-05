@@ -17,23 +17,23 @@
     <xsl:if test="not(matches(., '^\s*$'))">
       <!-- trim lines -->
       <xsl:variable name="step-trim-ends"
-                          select="replace(., '(^[ \t]+)|([ \t]+$)', '')"/>
+                    select="replace(., '(^[ \t]+)|([ \t]+$)', '')"/>
       <xsl:variable name="step-trim-lines"
-                          select="replace($step-trim-ends, '[ \t]*(\r?\n)[ \t]*', '$1')"/>
+                    select="replace($step-trim-ends, '[ \t]*(\r?\n)[ \t]*', '$1')"/>
       <!-- trim first and last lines if they are blank -->
       <xsl:variable name="step-trim-first-blank-line"
-                          select="replace($step-trim-lines, '^\r?\n', '')"/>
+                    select="replace($step-trim-lines, '^\r?\n', '')"/>
       <xsl:variable name="step-trim-last-blank-line"
-                          select="replace($step-trim-first-blank-line, '\r?\n$', '')"/>
+                    select="replace($step-trim-first-blank-line, '\r?\n$', '')"/>
       <!-- insert '% ' -->
       <xsl:variable name="step-insert-spaces"
-                          select="replace($step-trim-last-blank-line, '^%', '% ', 'm')"/>
+                    select="replace($step-trim-last-blank-line, '^%', '% ', 'm')"/>
       <xsl:variable name="step-insert-first"
-                          select="replace($step-insert-spaces, '^([^%])', '% $1')"/>
+                    select="replace($step-insert-spaces, '^([^%])', '% $1')"/>
       <xsl:variable name="step-insert-last"
-                          select="replace($step-insert-first, '(\r?\n)$', '$1% ')"/>
+                    select="replace($step-insert-first, '(\r?\n)$', '$1% ')"/>
       <xsl:variable name="step-insert"
-                          select="replace($step-insert-last, '(\r?\n)([^%])', '$1% $2')"/>
+                    select="replace($step-insert-last, '(\r?\n)([^%])', '$1% $2')"/>
       <xsl:value-of select="$step-insert"/>
       <!-- switch to a new line after the comment -->
       <xsl:value-of select="$nl"/>
@@ -117,10 +117,9 @@
     <xsl:text>,</xsl:text>
 
     <xsl:variable name="content-sequence" as="xs:string*">
-      <xsl:apply-templates>
+      <xsl:apply-templates select="r:*">
         <xsl:with-param name="depth" select="$depth" tunnel="yes"/>
-        <!-- this param indicates if the children can break the line at the very
-        beginning -->
+        <!-- this param indicates if the children can break the line at the very beginning -->
         <xsl:with-param name="line-breaking" select="false()" tunnel="yes"/>
       </xsl:apply-templates>
     </xsl:variable>
@@ -182,7 +181,9 @@
     </xsl:if>
     <xsl:value-of select="$quantifier"/>
     <xsl:text> [</xsl:text>
-    <xsl:call-template name="declare-list"/>
+    <xsl:call-template name="join">
+      <xsl:with-param name="list" select="r:declare/r:*"/>
+    </xsl:call-template>
     <xsl:text>] :</xsl:text>
 
     <xsl:variable name="content-sequence" as="xs:string*">
@@ -366,20 +367,9 @@
   <xsl:template match="r:Atom | r:Expr"> <!-- Expr is in Hornlog. -->
     <xsl:apply-templates select="r:op"/>
     <!-- sorted args -->
-    <xsl:for-each select="r:arg">
-      <xsl:choose>
-        <xsl:when test="preceding-sibling::r:arg">
-          <xsl:text>,</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:text>(</xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:apply-templates select="r:Ind | r:Var | r:Expr"/>
-      <xsl:if test="not(following-sibling::r:arg)">
-        <xsl:text>)</xsl:text>
-      </xsl:if>
-    </xsl:for-each>
+    <xsl:call-template name="optional-list">
+      <xsl:with-param name="list" select="r:arg/(r:Ind | r:Var | r:Expr)"/>
+    </xsl:call-template>
   </xsl:template>
 
   <!-- variables in the TPTP language start with a uppercase letter -->
@@ -402,16 +392,6 @@
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
-  </xsl:template>
-
-  <!-- a comma-separated list of declarations -->
-  <xsl:template name="declare-list">
-    <xsl:for-each select="r:declare">
-      <xsl:if test="preceding-sibling::r:declare">
-        <xsl:text>,</xsl:text>
-      </xsl:if>
-      <xsl:apply-templates select="r:*"/>
-    </xsl:for-each>
   </xsl:template>
 
   <xsl:template name="normalize-text">
@@ -505,14 +485,32 @@
 
   <xsl:template name="join">
     <xsl:param name="list"/>
-    <xsl:param name="separator" as="xs:string"/>
+    <xsl:param name="separator" select="','" as="xs:string"/>
 
     <xsl:for-each select="$list">
-      <xsl:apply-templates/>
+      <xsl:apply-templates select="current()"/>
       <xsl:if test="position() != last()">
         <xsl:value-of select="$separator"/>
       </xsl:if>
     </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="optional-list">
+    <xsl:param name="prefix" select="'('" as="xs:string"/>
+    <xsl:param name="list"/>
+    <xsl:param name="separator" select="','" as="xs:string"/>
+    <xsl:param name="suffix" select="')'" as="xs:string"/>
+
+    <xsl:if test="$list">
+      <xsl:value-of select="$prefix"/>
+    </xsl:if>
+    <xsl:call-template name="join">
+      <xsl:with-param name="list" select="$list"/>
+      <xsl:with-param name="separator" select="$separator"/>
+    </xsl:call-template>
+    <xsl:if test="$list">
+      <xsl:value-of select="$suffix"/>
+    </xsl:if>
   </xsl:template>
 
 </xsl:stylesheet>
