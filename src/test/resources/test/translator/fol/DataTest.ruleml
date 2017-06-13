@@ -3,13 +3,28 @@
 <RuleML xmlns="http://ruleml.org/spec">
   <Assert>
     <Atom>
-      <Rel>object</Rel>
-      <Var>_G1609</Var>
+      <Rel>o</Rel>
       <Ind>dog</Ind>
-      <Ind>countable</Ind>
-      <Ind>na</Ind>
       <Ind>eq</Ind>
       <Data>1</Data>
+    </Atom>
+    <Atom>
+      <Rel>o</Rel>
+      <Data>cat</Data>
+      <Ind>eq</Ind>
+      <Ind>dog</Ind>
+    </Atom>
+    <Atom>
+      <Rel>o</Rel>
+      <Data>CAT</Data>
+      <Ind>eq</Ind>
+      <Data>DOG</Data>
+    </Atom>
+    <Atom>
+      <Rel>o</Rel>
+      <Data>All</Data>
+      <Data>DATA</Data>
+      <Data>here</Data>
     </Atom>
   </Assert>
 </RuleML>

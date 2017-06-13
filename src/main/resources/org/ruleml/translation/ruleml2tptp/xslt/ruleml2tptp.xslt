@@ -368,7 +368,7 @@
     <xsl:apply-templates select="r:op"/>
     <!-- sorted args -->
     <xsl:call-template name="optional-list">
-      <xsl:with-param name="list" select="r:arg/(r:Ind | r:Var | r:Expr)"/>
+      <xsl:with-param name="list" select="r:arg/(r:Ind | r:Var | r:Expr | r:Data)"/>
     </xsl:call-template>
   </xsl:template>
 
@@ -392,6 +392,14 @@
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <!-- Data are assumed to not themselves contain double-quotes, hence in the TPTP language currently simply become
+  double-quoted strings -->
+  <xsl:template match="r:Data">
+    <xsl:text>"</xsl:text>
+    <xsl:value-of select="."/>
+    <xsl:text>"</xsl:text>
   </xsl:template>
 
   <xsl:template name="normalize-text">
