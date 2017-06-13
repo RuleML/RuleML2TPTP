@@ -1,3 +1,12 @@
 fof(act1_formula1,axiom,(
-    object(_G1609,dog,countable,na,eq) )).
+    o(dog,eq,"1") )).
+
+fof(act1_formula2,axiom,(
+    o("cat",eq,dog) )).
+
+fof(act1_formula3,axiom,(
+    o("CAT",eq,"DOG") )).
+
+fof(act1_formula4,axiom,(
+    o("All","DATA","here") )).
 
